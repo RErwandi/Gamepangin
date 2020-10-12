@@ -1,0 +1,26 @@
+{
+  "name": "com.erwandi.gamepangin",
+  "displayName": "Erwandi - Gamepangin",
+  "version": "0.0.1",
+  "unity": "2019.4",
+  "description": "Bikin game jadi gampang",
+  "keywords": [
+        "pattern",
+        "utility",
+        "unity",
+    ],
+  "homepage": "https://erwandi.com/",
+  "bugs": {
+    "url": "https://github.com/RErwandi/Gamepangin/issues"
+   },
+  "repository": {
+     "type": "git",
+     "url": "ssh://git@github.com:RErwandi/Gamepangin.git"
+  },
+  "license": "MIT",
+  "author": {
+         "name": "Reynold Erwandi",
+         "email": "reynolderwandi@gmail.com",
+         "url": "https://erwandi.com/"
+   }
+}
