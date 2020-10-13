@@ -2,6 +2,9 @@
 
 namespace Erwandi.Gamepangin.Utilities
 {
+    /// <summary>
+    /// Extension methods for Array type
+    /// </summary>
     public static class ArrayExtensions
     {
         /// <summary>

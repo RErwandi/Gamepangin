@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Erwandi.Gamepangin.Utilities
 {
+    /// <summary>
+    /// Extension methods for Animator type
+    /// </summary>
     public static class AnimatorExtensions
     {
         /// <summary>
