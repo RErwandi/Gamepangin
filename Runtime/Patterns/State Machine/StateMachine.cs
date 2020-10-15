@@ -8,14 +8,14 @@ namespace Erwandi.Gamepangin.Patterns
     [AddComponentMenu("Gamepangin/State Machine")]
     public class StateMachine : MonoBehaviour
     {
-        public bool enableDefaultState;
-        [ValueDropdown("AvailableStates"), Required]
+        [ValueDropdown("AvailableStates"), BoxGroup("State Machine"), Required]
         public string defaultState;
+        [BoxGroup("State Machine")]
         public State[] states = new State[0];
 
         public State CurrentState { get; private set; }
 
-        [Button(ButtonSizes.Large), HideInPlayMode]
+        [Button(ButtonSizes.Large), BoxGroup("State Machine"), HideInPlayMode]
         private void AddNewState()
         {
             var newState = new GameObject($"State {states.Length}");
@@ -30,7 +30,7 @@ namespace Erwandi.Gamepangin.Patterns
                 CurrentState = state;
         }
 
-        [ValueDropdown("AvailableStates"), HorizontalGroup("TestState"), ShowInInspector, DisableInEditorMode, PropertyOrder(10)]
+        [ValueDropdown("AvailableStates"), BoxGroup("Debug"), ShowInInspector, DisableInEditorMode]
         private string testState = "";
 
         [Button(ButtonSizes.Large), BoxGroup("Debug"), DisableInEditorMode]
@@ -46,9 +46,8 @@ namespace Erwandi.Gamepangin.Patterns
                 if(state.gameObject.activeSelf)
                     state.gameObject.SetActive(false);
             }
-
-            if(enableDefaultState) 
-                SetState(defaultState);
+            
+            SetState(defaultState);
         }
 
         /// <summary>
