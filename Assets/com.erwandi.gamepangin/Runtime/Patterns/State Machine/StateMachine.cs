@@ -9,7 +9,7 @@ namespace Erwandi.Gamepangin.Patterns
     public class StateMachine : MonoBehaviour
     {
         public bool enableDefaultState;
-        [ShowIf("enableDefaultState"), ValueDropdown("AvailableStates")]
+        [ValueDropdown("AvailableStates"), Required]
         public string defaultState;
         public State[] states = new State[0];
 
@@ -20,14 +20,18 @@ namespace Erwandi.Gamepangin.Patterns
         {
             var newState = new GameObject($"State {states.Length}");
             var state = newState.AddComponent<State>();
+            newState.transform.parent = transform;
+            newState.transform.localPosition = Vector3.zero;
+            newState.transform.localRotation = Quaternion.identity;
+            newState.transform.localScale = Vector3.one;
             states = states.Concat(new[] { state }).ToArray();
 
             if (CurrentState == null)
                 CurrentState = state;
         }
 
-        [ValueDropdown("AvailableStates"), BoxGroup("Debug"), ShowInInspector, DisableInEditorMode]
-        private string testState = null;
+        [ValueDropdown("AvailableStates"), HorizontalGroup("TestState"), ShowInInspector, DisableInEditorMode, PropertyOrder(10)]
+        private string testState = "";
 
         [Button(ButtonSizes.Large), BoxGroup("Debug"), DisableInEditorMode]
         private void ChangeState()
