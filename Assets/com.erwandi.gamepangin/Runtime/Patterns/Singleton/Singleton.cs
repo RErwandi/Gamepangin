@@ -41,9 +41,6 @@ namespace Erwandi.Gamepangin.Patterns
 		
 		protected virtual void Awake()
 		{
-			// Move singleton to singleton service parent
-			gameObject.transform.SetParent(SingletonService.Parent);
-			
 			if (_instance == null)
 			{
 				//If I am the first instance, make me the Singleton
@@ -71,7 +68,7 @@ namespace Erwandi.Gamepangin.Patterns
 		{
 			var singleton = new GameObject();
 			_instance = singleton.AddComponent<T>();
-			singleton.name = $"{typeof(T).FullName}";
+			singleton.name = $"[Singleton] {typeof(T).FullName}";
 		}
 
 		/// <summary>
