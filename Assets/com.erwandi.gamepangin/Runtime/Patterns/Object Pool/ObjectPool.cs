@@ -476,7 +476,7 @@ namespace Erwandi.Gamepangin.Patterns
             Initialized = false;
 
 #if !UNITY_EDITOR
-            if (_autoInitialize)
+            if (autoInitialize)
             {
                 Initialize();
             }
