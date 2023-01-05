@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8046659d5fa13994ab4d2aea5dacafd0, type: 3}
+  m_Name: ScriptableObject.assets
+  m_EditorClassIdentifier: 
+  repository:
+    rid: 6607521849070845957
+  references:
+    version: 2
+    RefIds:
+    - rid: 6607521849070845957
+      type: {class: ScriptableObjectWithIdRepository, ns: Gamepangin, asm: Gamepangin.Runtime}
+      data:
+        scriptableObjects:
+        - {fileID: 11400000, guid: c0d1b9eb755a62941aa5b871cf82682f, type: 2}
+        - {fileID: 11400000, guid: 0edac94dcd74e354aa457b55f98fafd6, type: 2}

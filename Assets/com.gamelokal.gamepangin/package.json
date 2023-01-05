@@ -1,0 +1,21 @@
+{
+  "name": "com.gamelokal.gamepangin",
+  "displayName": "Gamepangin",
+  "version": "1.0.0",
+  "unity": "2021.3",
+  "description": "Bikin game? Ya Gamepangin aja! Solusi bikin game jadi gampang!",
+  "documentationUrl": "https://gamelokal.notion.site/Gamepangin-f2963499d0dd4caeaf90ea724b3cd89e",
+  "changelogUrl": "https://www.notion.so/gamelokal/Changelog-2e1fa076300c4f44a23db174e47d898b",
+  "keywords": [
+        "pattern",
+        "utility",
+        "unity",
+        "tools"
+    ],
+  "license": "MIT",
+  "author": {
+         "name": "Reynold Erwandi",
+         "email": "reynolderwandi@gmail.com",
+         "url": "https://erwandi.com/"
+   }
+}

@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16703da884c777e4fb4a4b9a5a7fd241, type: 3}
+  m_Name: Rainy Night
+  m_EditorClassIdentifier: 
+  id:
+    uniqueId: Rainy Night
+  sound: {fileID: 8300000, guid: 89f88f827a0bef046a8b59b10fc1d3cb, type: 3}
+  useRandomSounds: 0
+  randomSounds: []
+  volume: {x: 1, y: 1}
+  pitch: {x: 1, y: 1}
+  audioTrack: 2
+  loop: 1
+  persistent: 0
+  doNotPlayIfClipAlreadyPlaying: 0
+  doNotAutoRecycleIfNotDonePlaying: 0
+  fade: 0
+  fadeInitialVolume: 0
+  fadeDuration: 1
+  fadeEase: 13
+  soloSingleTrack: 0
+  soloAllTracks: 0
+  autoUnSoloOnEnd: 0
+  panStereo: 0
+  spatialBlend: 0
+  bypassEffects: 0
+  bypassListenerEffects: 0
+  bypassReverbZones: 0
+  priority: 128
+  reverbZoneMix: 1
+  dopplerLevel: 1
+  spread: 0
+  rolloffMode: 0
+  minDistance: 1
+  maxDistance: 500
