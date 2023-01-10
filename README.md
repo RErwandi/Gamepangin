@@ -10,8 +10,8 @@ Gamepangin adalah Unity Package yang berisikan macam2 kebutuhan dan sistem siap 
 ## Cara Install (Unity 2020.2 dan terbaru)
 
 - Di Unity, buka window **Project Settings** (Edit/Project Settings) dan masuk ke bagian **Package Manager**
-- Tambahkan **Scoped Registry** baru dengan URL : 
-- Tambahkan scope berikut pada bagian Scope(s) : 
+- Tambahkan **Scoped Registry** baru dengan URL : `https://package.openupm.com`
+- Tambahkan scope berikut pada bagian Scope(s) : `com.gamelokal`
 - Klik **Save** untuk menyimpan perubahan tersebut
 - Buka window **Package Manager Window** (Window/Package Manager) dan pilih **Packages : My Registries** pada toolbar di bagian kiri atas
 - Pilih **Gamepangin** di dalam daftar tersebut, lalu klik **Install**
