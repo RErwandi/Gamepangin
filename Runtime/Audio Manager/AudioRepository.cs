@@ -11,9 +11,9 @@ namespace Gamepangin
     {
         public override string RepositoryId => "Audio.assets";
 
-        [SerializeField] private AudioClipData[] clips;
+        [SerializeField] private AudioClipSettings[] clips;
 
-        public AudioClipData[] Clips
+        public AudioClipSettings[] Clips
         {
             get => clips;
             set => clips = value;
