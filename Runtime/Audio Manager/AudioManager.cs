@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sirenix.OdinInspector;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -400,6 +401,7 @@ namespace Gamepangin
             return null;
         }
 
+#if UNITY_EDITOR
         [MenuItem("GameObject/Gamepangin/Audio/Audio Manager", priority = 0)]
         private static void CreateAudioManager()
         {
@@ -408,5 +410,6 @@ namespace Gamepangin
             Undo.RegisterCreatedObjectUndo(instance, $"Create {instance.name}");
             Selection.activeObject = instance;
         }
+#endif        
     }
 }

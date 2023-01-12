@@ -10,7 +10,7 @@ namespace Gamepangin
 {
     public class StorageJson : DataStorage
     {
-        private const string FILE_NAME = "save.json";
+        public string filename = "savefile.json";
         private static Dictionary<string, StoreType> data;
         
 #if UNITY_EDITOR
@@ -65,7 +65,7 @@ namespace Gamepangin
 
         public override Task Commit()
         {
-            string path = Path.Combine(Application.persistentDataPath, FILE_NAME);
+            string path = Path.Combine(Application.persistentDataPath, filename);
             
             try
             {
@@ -100,7 +100,7 @@ namespace Gamepangin
                 data = new Dictionary<string, StoreType>();
                 Block content = null;
                     
-                string path = Path.Combine(Application.persistentDataPath, FILE_NAME);
+                string path = Path.Combine(Application.persistentDataPath, filename);
 
                 if (File.Exists(path)) 
                 {

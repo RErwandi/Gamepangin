@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 
 namespace Gamepangin
@@ -274,7 +275,7 @@ namespace Gamepangin
         private async Task SaveGame(int slot)
         {
             Debug.Log($"Saving game...");
-            await SaveLoadManager.Instance.Save(slot);
+            await Instance.Save(slot);
             Debug.Log($"Game saved!");
         }
 
@@ -282,14 +283,14 @@ namespace Gamepangin
         private async Task LoadGame(int slot)
         {
             Debug.Log($"Loading game...");
-            await SaveLoadManager.Instance.Load(slot);
+            await Instance.Load(slot);
             Debug.Log($"Game loaded!");
         }
 
         [Button]
         private void DeleteSlot(int slot)
         {
-            _ = SaveLoadManager.Instance.Delete(slot);
+            _ = Instance.Delete(slot);
             Debug.Log($"Slot deleted");
         }
 
@@ -301,6 +302,23 @@ namespace Gamepangin
             UnityEditor.EditorUtility.RevealInFinder(path);
         }
         
+        [MenuItem("GameObject/Gamepangin/Save Load/PlayerPrefs Storage", priority = 0)]
+        private static void CreateSaveLoadPlayerPrefs()
+        {
+            var prefab = Resources.Load<GameObject>("SaveLoad PlayerPrefs");
+            var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);
+            Undo.RegisterCreatedObjectUndo(instance, $"Create {instance.name}");
+            Selection.activeObject = instance;
+        }
+        
+        [MenuItem("GameObject/Gamepangin/Save Load/JSON Storage", priority = 0)]
+        private static void CreateSaveLoadJson()
+        {
+            var prefab = Resources.Load<GameObject>("SaveLoad Json");
+            var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);
+            Undo.RegisterCreatedObjectUndo(instance, $"Create {instance.name}");
+            Selection.activeObject = instance;
+        }
 #endif
     }
 }
