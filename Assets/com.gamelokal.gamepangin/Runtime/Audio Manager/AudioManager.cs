@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -42,33 +43,24 @@ namespace Gamepangin
             pool.PreloadAll();
         }
 
-        public virtual void PlaySound(string id)
+        public virtual void PlaySound(string id, Vector3 location = default)
         {
             var clipData = GetClipFromDatabase(id);
-            PlaySound(clipData);
+            PlaySound(clipData, location);
         }
 
-        private AudioClipData GetClipFromDatabase(string id)
+        private AudioClipSettings GetClipFromDatabase(string id)
         {
             var allClips = Database.Get<AudioRepository>().Clips;
-            foreach (var clip in allClips)
-            {
-                if (clip.id.ToString().Equals(id))
-                {
-                    return clip;
-                }
-            }
-
-            return null;
+            return allClips.FirstOrDefault(clip => clip.id.Equals(id));
         }
 
-        [Button]
-        public virtual void PlaySound(AudioClipData clipData, Vector3 location = default)
+        public virtual void PlaySound(AudioClipSettings clipSettings, Vector3 location = default)
         {
             var audioSourceGo = pool.Spawn(transform);
             var audioSound = audioSourceGo.GetComponent<AudioManagerSound>();
-            var clip = clipData;
-            audioSound.id = clipData.id.ToString();
+            var clip = clipSettings;
+            audioSound.id = clipSettings.id.ToString();
 
             bool alreadyIn = false;
             foreach (var audioManagerSound in sounds)
@@ -406,6 +398,15 @@ namespace Gamepangin
             
             Debug.LogWarning($"Audio clip with id [{id}] doesnt found in Audio Database.");
             return null;
+        }
+
+        [MenuItem("GameObject/Gamepangin/Audio/Audio Manager", priority = 0)]
+        private static void CreateAudioManager()
+        {
+            var prefab = Resources.Load<AudioManager>("Audio Manager");
+            var instance = PrefabUtility.InstantiatePrefab(prefab, Selection.activeTransform);
+            Undo.RegisterCreatedObjectUndo(instance, $"Create {instance.name}");
+            Selection.activeObject = instance;
         }
     }
 }

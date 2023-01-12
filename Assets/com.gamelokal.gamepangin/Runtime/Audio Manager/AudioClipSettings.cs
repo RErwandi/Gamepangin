@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -6,8 +5,8 @@ using Random = UnityEngine.Random;
 
 namespace Gamepangin
 {
-	[Serializable]
-    public class ClipSettings
+	[CreateAssetMenu(order = 0, fileName = "Audio Clip", menuName = "Gamepangin/Audio/Clip")]
+    public class AudioClipSettings : ScriptableObjectWithId
     {
 	    [Title("Sound")]
 	    [Tooltip("the sound clip to play")]
