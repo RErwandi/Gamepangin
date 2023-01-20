@@ -9,6 +9,7 @@ namespace Gamepangin
     {
         protected override bool IsPersistBetweenScenes => false;
         
+        [SerializeField]
         private List<Menu> menuScreens = new();
 
         public List<Menu> MenuScreens
@@ -24,7 +25,6 @@ namespace Gamepangin
 
         private void Start()
         {
-            menuScreens = Database.Get<MenuRepository>().Menus.ToList();
             if (startMenu != null)
             {
                 var startMenuInst = CreateInstance(startMenu.name);
