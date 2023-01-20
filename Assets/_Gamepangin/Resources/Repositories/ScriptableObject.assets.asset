@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: ScriptableObject.assets
   m_EditorClassIdentifier: 
   repository:
-    rid: 5629454730478747649
+    rid: 6607522184412528641
   references:
     version: 2
     RefIds:
-    - rid: 5629454730478747649
+    - rid: 6607522184412528641
       type: {class: ScriptableObjectWithIdRepository, ns: Gamepangin, asm: Gamepangin.Runtime}
       data:
-        scriptableObjects: []
+        scriptableObjects:
+        - {fileID: 11400000, guid: c0d1b9eb755a62941aa5b871cf82682f, type: 2}
+        - {fileID: 11400000, guid: 0edac94dcd74e354aa457b55f98fafd6, type: 2}
