@@ -9,7 +9,7 @@ namespace Gamepangin
 
         public static UnityEvent onOpen = new();
         public static UnityEvent onClose = new();
-        
+
         protected virtual void Awake()
         {
             Instance = (T)this;
@@ -27,12 +27,16 @@ namespace Gamepangin
                 MenuManager.Instance.CreateInstance(typeof(T).Name, out var clonedGameObject);
                 MenuManager.Instance.OpenMenu(clonedGameObject.GetMenu());
             }
+            else if (Instance.gameObject.activeInHierarchy)
+            {
+                Debug.LogWarning($"{Instance.gameObject.name} already opened");
+                return Instance;
+            }
             else
             {
                 Instance.gameObject.SetActive(true);
                 MenuManager.Instance.OpenMenu(Instance);
             }
-            
             onOpen?.Invoke();
             return Instance;
         }
@@ -44,8 +48,8 @@ namespace Gamepangin
                 return;
             }
 
-            MenuManager.Instance.CloseMenu(Instance);
             onClose?.Invoke();
+            MenuManager.Instance.CloseMenu(Instance);
         }
 
         public override void OnBackPressed()
