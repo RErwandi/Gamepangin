@@ -10,7 +10,7 @@ Did you know Gamepangin is named after an Indonesian words 'Gampangin'? It's mea
 - [Odin Inspector and Serializer](https://assetstore.unity.com/packages/tools/utilities/odin-inspector-and-serializer-89041)
 - [DOTween](https://assetstore.unity.com/packages/tools/animation/dotween-hotween-v2-27676)
 
-## How to Install (Unity 2020.2 dan newer)
+## How to Install (Unity 2020.2 or newer)
 
 - In Unity, open **Project Settings window** (Edit/Project Settings) and go to **Package Manager**
 - Add a new **Scoped Registry** with URL : `https://package.openupm.com`

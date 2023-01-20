@@ -1,9 +1,9 @@
 {
   "name": "com.gamelokal.gamepangin",
   "displayName": "Gamepangin",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "unity": "2021.3",
-  "description": "Bikin game? Ya Gamepangin aja! Solusi bikin game jadi gampang!",
+  "description": "Game development made easy!",
   "documentationUrl": "https://gamepangin.gamelokal.com/",
   "changelogUrl": "https://gamepangin.gamelokal.com/gamepangin/changelog",
   "keywords": [

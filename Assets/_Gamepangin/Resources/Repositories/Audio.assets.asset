@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Audio.assets
   m_EditorClassIdentifier: 
   repository:
-    rid: 6607522184412528640
+    rid: 5629454917099585536
   references:
     version: 2
     RefIds:
-    - rid: 6607522184412528640
+    - rid: 5629454917099585536
       type: {class: AudioRepository, ns: Gamepangin, asm: Gamepangin.Runtime}
       data:
         clips:
