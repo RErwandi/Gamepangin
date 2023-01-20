@@ -89,9 +89,9 @@ GameObject:
   - component: {fileID: 5989408443290909472}
   - component: {fileID: 5989408443290909473}
   - component: {fileID: 5989408443290909478}
-  - component: {fileID: -6922560163307055668}
+  - component: {fileID: 1882778602505339800}
   m_Layer: 5
-  m_Name: TestMenu
+  m_Name: AnotherMenu
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 55
---- !u!114 &-6922560163307055668
+--- !u!114 &1882778602505339800
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -188,7 +188,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5989408443290909479}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96c992e7c7aa03244b631a38e41cc719, type: 3}
+  m_Script: {fileID: 11500000, guid: d40465692c95bef4ba9b00efed9d67b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   destroyWhenClosed: 1

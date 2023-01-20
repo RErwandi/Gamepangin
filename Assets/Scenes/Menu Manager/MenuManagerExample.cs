@@ -8,4 +8,9 @@ public class MenuManagerExample : MonoBehaviour
     {
         TestMenu.Open();
     }
+
+    public void OpenAnotherMenu()
+    {
+        AnotherMenu.Open();
+    }
 }
