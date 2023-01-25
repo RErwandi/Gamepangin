@@ -15,18 +15,25 @@ namespace Gamepangin
                 {
                     if (ApplicationManager.IsExiting) return null;
                     
-                    var singleton = new GameObject();
-                    instance = singleton.AddComponent<T>();
-                    singleton.name = $"(Singleton) {typeof(T)}";
-
-                    var component = instance.GetComponent<Singleton<T>>();
-                    component.OnCreate();
-
-                    if (component.IsPersistBetweenScenes) DontDestroyOnLoad(singleton);
+                    instance = (T)FindObjectOfType(typeof(T));
+                    if(instance == null)
+                        CreateInstance();
                 }
 
                 return instance;
             }
+        }
+
+        private static void CreateInstance()
+        {
+            var singleton = new GameObject();
+            instance = singleton.AddComponent<T>();
+            singleton.name = $"(Singleton) {typeof(T)}";
+
+            var component = instance.GetComponent<Singleton<T>>();
+            component.OnCreate();
+
+            if (component.IsPersistBetweenScenes) DontDestroyOnLoad(singleton);
         }
 
         protected virtual void Awake()
