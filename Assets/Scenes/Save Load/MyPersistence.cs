@@ -12,11 +12,16 @@ public class MyPersistence : MonoBehaviour, IGameSave
     public bool IsShared => false;
     public Type SaveType => typeof(MyState);
     public object SaveData => state;
-    public LoadMode LoadMode => LoadMode.Immediately;
+    public LoadMode LoadMode => LoadMode.OnLoad;
 
-    private void Start()
+    private void OnEnable()
     {
         _ = SaveLoadManager.Subscribe(this);
+    }
+
+    private void OnDisable()
+    {
+        SaveLoadManager.Unsubscribe(this);
     }
 
     [Button]
