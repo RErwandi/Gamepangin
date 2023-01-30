@@ -45,7 +45,9 @@ namespace Gamepangin
         private const int SLOT_MAX = 9999;
         private const string DB_KEY_FORMAT = "data-{0:D4}-{1}";
         
+        [ShowInInspector, ReadOnly]
         private Dictionary<string, Reference> subscribers= new();
+        [ShowInInspector, ReadOnly]
         private Dictionary<string, Value> values = new();
         
         public int SlotLoaded { get; private set; } = -1;
@@ -255,6 +257,33 @@ namespace Gamepangin
             IsDeleting = false;
             
             EventAfterDelete?.Invoke(slot);
+        }
+        
+        public async Task DeleteKey(string key)
+        {
+            if (IsSaving || IsLoading || IsDeleting) return;
+            int slot;
+            
+            if (IsGameLoaded) 
+                slot = SlotLoaded;
+            else 
+                return;
+
+            IsDeleting = true;
+
+            if (slots.TryGetValue(slot, out Slots.Data data))
+            {
+                for (int i = data.keys.Length - 1; i >= 0; --i)
+                {
+                    if(data.keys[i] != key) continue;
+                    
+                    string dataKey = DatabaseKey(slot, false, data.keys[i]);
+                    await dataStorage.DeleteKey(dataKey);
+                    values.Remove(key);
+                }
+            }
+            
+            IsDeleting = false;
         }
         
         private async Task LoadItem(IGameSave reference, int slot)
