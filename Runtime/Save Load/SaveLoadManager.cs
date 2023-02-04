@@ -259,6 +259,7 @@ namespace Gamepangin
             EventAfterDelete?.Invoke(slot);
         }
         
+        [Button]
         public async Task DeleteKey(string key)
         {
             if (IsSaving || IsLoading || IsDeleting) return;
@@ -279,8 +280,21 @@ namespace Gamepangin
                     
                     string dataKey = DatabaseKey(slot, false, data.keys[i]);
                     await dataStorage.DeleteKey(dataKey);
-                    values.Remove(key);
                 }
+                
+                List<string> keys = new List<string>();
+                foreach (KeyValuePair<string, Value> entry in values)
+                {
+                    if (entry.Value.isShared) continue;
+                    if(entry.Key == key) continue;
+                    keys.Add(entry.Key);
+                }
+
+                values.Remove(key);
+                slots.Update(slot, keys.ToArray());
+
+                string dbKey = DatabaseKey(slot, slots.IsShared, slots.SaveId);
+                await dataStorage.SetBlob(dbKey, slots.SaveData);
             }
             
             IsDeleting = false;
