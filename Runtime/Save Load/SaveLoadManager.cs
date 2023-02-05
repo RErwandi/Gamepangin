@@ -264,11 +264,11 @@ namespace Gamepangin
         {
             if (IsSaving || IsLoading || IsDeleting) return;
             int slot;
-            
-            if (IsGameLoaded) 
+
+            if (IsGameLoaded)
                 slot = SlotLoaded;
-            else 
-                return;
+            else
+                slot = SLOT_MIN;
 
             IsDeleting = true;
 
