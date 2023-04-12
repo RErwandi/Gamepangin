@@ -40,18 +40,17 @@ namespace Gamepangin
         {
             if (ApplicationManager.IsExiting) return;
 
+            if (instance != null && instance != this)
+            {
+                Destroy(this);
+                return;
+            }
+
+            instance = this as T;
+
             if (IsPersistBetweenScenes)
             {
                 DontDestroyOnLoad(this);
-            }
-
-            if (instance == null)
-            {
-                instance = this as T;
-            }
-            else
-            {
-                Destroy(gameObject);
             }
         }
         
