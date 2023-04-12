@@ -33,6 +33,7 @@ namespace Gamepangin
             }
 
             Get().ScriptableObjects = so;
+            EditorUtility.SetDirty(this);
         }
 #endif
     }

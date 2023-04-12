@@ -33,6 +33,7 @@ namespace Gamepangin
             }
 
             Get().Clips = clips;
+            EditorUtility.SetDirty(this);
         }
 #endif
     }
