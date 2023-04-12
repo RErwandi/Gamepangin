@@ -260,17 +260,32 @@ namespace Gamepangin
         }
         
         [Button]
-        public async Task DeleteKey(string key)
+        public async Task DeleteKey(string key, int slot = -1)
         {
             if (IsSaving || IsLoading || IsDeleting) return;
-            int slot;
-
-            if (IsGameLoaded)
+            
+            if (IsGameLoaded && slot == -1)
+            {
                 slot = SlotLoaded;
-            else
-                slot = SLOT_MIN;
+            }
+
+            if (!HasSaveAt(slot))
+            {
+                Debug.LogWarning($"Cannot delete key in this slot: {slot} because it doesn't exist");
+                return;
+            }
 
             IsDeleting = true;
+            
+            foreach (KeyValuePair<string, Reference> item in subscribers)
+            {
+                if (item.Value.reference == null) continue;
+                values[item.Value.reference.SaveId] = new Value
+                {
+                    value = item.Value.reference.SaveData,
+                    isShared = item.Value.reference.IsShared
+                };
+            }
 
             if (slots.TryGetValue(slot, out Slots.Data data))
             {
@@ -335,6 +350,11 @@ namespace Gamepangin
         {
             _ = Instance.Delete(slot);
             Debug.Log($"Slot deleted");
+        }
+
+        public void InvokeAfterLoad()
+        {
+            EventAfterLoad?.Invoke(SlotLoaded);
         }
 
 #if UNITY_EDITOR
