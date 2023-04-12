@@ -40,36 +40,21 @@ namespace Gamepangin
         /// </summary>
         /// <param name="totalSeconds">total seconds</param>
         /// <param name="format">Time format to display</param>
-        /// <param name="flexible">if true, zero will not be shown. example: show "16m 24s" instead of "0h 16m 24s"</param>
         /// <returns></returns>
-        public static string DisplayTimer(this float totalSeconds, TimeDisplayFormat format, bool flexible = false)
+        public static string DisplayTimer(this float totalSeconds, TimeDisplayFormat format)
         {
-            var timespan = TimeSpan.FromSeconds(totalSeconds);
-            
             switch (format)
             {
                 case TimeDisplayFormat.Second:
                     return DisplayTimerSecond(totalSeconds);
                 case TimeDisplayFormat.MinuteSecond:
-                    if(timespan.TotalMinutes > 1 || !flexible)
                         return DisplayTimerMinuteSecond(totalSeconds);
-                    return DisplayTimerSecond(totalSeconds);
                 case TimeDisplayFormat.HourMinuteSecond:
-                    if(timespan.TotalHours > 1 || !flexible)
                         return DisplayTimerHourMinuteSecond(totalSeconds);
-                    if(timespan.TotalMinutes > 1)
-                        return DisplayTimerMinuteSecond(totalSeconds);
-                    return DisplayTimerSecond(totalSeconds);
                 case TimeDisplayFormat.DayHourMinuteSecond:
-                    if(timespan.TotalDays > 1 || !flexible)
                         return DisplayTimerDayHourMinuteSecond(totalSeconds);
-                    if(timespan.TotalHours > 1)
-                        return DisplayTimerHourMinuteSecond(totalSeconds);
-                    if(timespan.TotalMinutes > 1)
-                        return DisplayTimerMinuteSecond(totalSeconds);
-                    return DisplayTimerSecond(totalSeconds);
                 default:
-                    return DisplayTimerHourMinuteSecond(totalSeconds);
+                    return DisplayTimerDayHourMinuteSecond(totalSeconds);
             }
         }
 
@@ -95,6 +80,25 @@ namespace Gamepangin
         {
             var timespan = TimeSpan.FromSeconds(totalSeconds);
             return $"{(int)timespan.TotalDays:D2}d {timespan.Hours:D2}h {timespan.Minutes:D2}m {timespan.Seconds:D2}s";
+        }
+
+        public static string DisplayTimerFlexible(this float totalSeconds)
+        {
+            return DisplayFlexible(totalSeconds);
+        }
+        
+        private static string DisplayFlexible(float totalSeconds)
+        {
+            var timespan = TimeSpan.FromSeconds(totalSeconds);
+            var days = (int)timespan.TotalDays;
+            var daysText = days > 0 ? $"{days}d " : "";
+            var hours = timespan.Hours;
+            var hoursText = hours > 0 ? $"{hours}h " : "";
+            var minutes = timespan.Minutes;
+            var minutesText = minutes > 0 ? $"{minutes}m " : "";
+            var seconds = timespan.Seconds;
+            var secondsText = seconds > 0 ? $"{seconds}s" : "";
+            return $"{daysText}{hoursText}{minutesText}{secondsText}";
         }
     }
 }
