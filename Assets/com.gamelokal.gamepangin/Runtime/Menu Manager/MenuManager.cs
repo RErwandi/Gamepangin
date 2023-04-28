@@ -22,7 +22,6 @@ namespace Gamepangin
         [SerializeField]
         private Menu startMenu;
 
-        [ShowInInspector]
         private Stack<Menu> menuStack = new();
 
         private void Start()
