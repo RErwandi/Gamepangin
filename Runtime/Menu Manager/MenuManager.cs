@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Gamepangin
@@ -8,6 +9,7 @@ namespace Gamepangin
     {
         protected override bool IsPersistBetweenScenes => false;
         
+        [InlineButton(nameof(SetDatabase), "Auto")]
         [SerializeField]
         private MenuDatabase menuDatabase;
 
@@ -121,6 +123,14 @@ namespace Gamepangin
             if (Input.GetKeyDown(KeyCode.Escape) && menuStack.Count > 0)
             {
                 menuStack.Peek().OnBackPressed();
+            }
+        }
+
+        private void SetDatabase()
+        {
+            menuDatabase = GamepanginGeneralSettings.Instance.menuDatabase;
+            if(menuDatabase == null){
+                Debug.LogWarning("Menu Database has not been created in Gamepangin General Settings.");
             }
         }
     }
