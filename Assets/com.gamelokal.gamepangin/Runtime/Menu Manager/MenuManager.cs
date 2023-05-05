@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 namespace Gamepangin
@@ -11,24 +9,20 @@ namespace Gamepangin
         protected override bool IsPersistBetweenScenes => false;
         
         [SerializeField]
-        private List<Menu> menuScreens = new();
+        private MenuDatabase menuDatabase;
 
-        public List<Menu> MenuScreens
-        {
-            get => menuScreens;
-            set => menuScreens = value;
-        }
+        public List<Menu> MenuScreens => menuDatabase.MenuScreens;
 
         [SerializeField]
-        private Menu startMenu;
+        private int startMenuIndex = -1;
 
         private Stack<Menu> menuStack = new();
 
         private void Start()
         {
-            if (startMenu != null)
+            if (startMenuIndex >= 0 && MenuScreens.Count > 0)
             {
-                var startMenuInst = CreateInstance(startMenu.name);
+                var startMenuInst = CreateInstance(MenuScreens[startMenuIndex].name);
                 OpenMenu(startMenuInst.GetMenu());
             }
         }

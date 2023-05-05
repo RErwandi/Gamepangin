@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c244fff1178d6aa45959d0e007a6e5e1, type: 3}
-  m_Name: GamepanginGeneralSettings
+  m_Script: {fileID: 11500000, guid: 2175bccd7d849d34c9048d8b77c8bdda, type: 3}
+  m_Name: Menu Database
   m_EditorClassIdentifier: 
-  menuDatabase: {fileID: 11400000, guid: a2121c6e5e7e7544594c916f9149b0a3, type: 2}
-  databaseFolders: []
+  menuScreens:
+  - {fileID: 1882778602505339800, guid: 0cbc9006cb2b27247969741aeec8454b, type: 3}
+  - {fileID: -6922560163307055668, guid: 1c451a5915085b54d8e52fa1a1907b1a, type: 3}
