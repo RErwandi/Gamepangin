@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using UnityEngine;
 
 namespace Gamepangin
 {
@@ -10,8 +11,9 @@ namespace Gamepangin
         [InlineButton(nameof(CreateNewMenuDatabase), "New")]
 #endif
         public MenuDatabase menuDatabase;
-        [FolderPath]
-        public string[] databaseFolders;
+        
+        [FolderPath, SerializeField] private string audioFolderPath;
+        public string AudioFolderPath => string.IsNullOrEmpty(audioFolderPath) ? "_Gamepangin/Audio" : audioFolderPath;
 
 #if UNITY_EDITOR
         private void CreateNewMenuDatabase()

@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Gamepangin.Editor
 {
-    public class GamepanginEditorWindow : OdinMenuEditorWindow
+    public class AudioClipEditorWindow : OdinMenuEditorWindow
     {
-        [MenuItem("Gamepangin/Settings")]
+        [MenuItem("Gamepangin/Audio Database")]
         private static void OpenWindow()
         {
-            var window = GetWindow<GamepanginEditorWindow>();
+            var window = GetWindow<AudioClipEditorWindow>();
             window.minSize = new Vector2(800, 600);
             window.Show();
         }
@@ -17,8 +17,8 @@ namespace Gamepangin.Editor
         protected override OdinMenuTree BuildMenuTree()
         {
             var tree = new OdinMenuTree();
-            tree.Add("Editor", GamepanginGeneralSettings.Instance);
-            tree.Add("Bootstrapper", BootstrapperConfig.Instance);
+            tree.Config.DrawSearchToolbar = true;
+            tree.AddAllAssetsAtPath("Audio", GamepanginGeneralSettings.Instance.AudioFolderPath, typeof(AudioClipSettings), true);
             return tree;
         }
     }

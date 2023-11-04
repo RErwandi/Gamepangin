@@ -100,5 +100,15 @@ namespace Gamepangin
             var secondsText = seconds > 0 ? $"{seconds}s" : "";
             return $"{daysText}{hoursText}{minutesText}{secondsText}";
         }
+
+        public static string ToString(this DateTime dateTime)
+        {
+            return dateTime.ToString("dd/MM/yyyy HH:mm:ss");
+        }
+
+        public static DateTime ToDateTime(this string dateTime)
+        {
+            return DateTime.ParseExact(dateTime, "dd/MM/yyyy HH:mm:ss", null);
+        }
     }
 }
