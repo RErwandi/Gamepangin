@@ -1,12 +1,13 @@
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Gamepangin
 {
 	[CreateAssetMenu(order = 0, fileName = "Audio Clip", menuName = "Gamepangin/Audio/Clip")]
-    public class AudioClipSettings : ScriptableObjectWithId
+    public class AudioClipSettings : DataDefinition<AudioClipSettings>
     {
 	    [Title("Sound")]
 	    [Tooltip("the sound clip to play")]
@@ -104,5 +105,72 @@ namespace Gamepangin
 		[FoldoutGroup("3D Sound Settings")]
 		[Tooltip("(Logarithmic rolloff) MaxDistance is the distance a sound stops attenuating at.")]
 		public float maxDistance = 500f;
+		
+		#if UNITY_EDITOR
+	    
+	    private GameObject previewAudioGo;
+	    private AudioManagerSound previewAudioSound;
+	    private bool editorStillPlaying;
+
+	    [SerializeField, ProgressBar(0f, 1f, DrawValueLabel = false), HideLabel] 
+	    private float previewProgress = 0f;
+	    
+	    [HideIf(nameof(editorStillPlaying))]
+	    [Button(ButtonSizes.Large), HorizontalGroup]
+	    private void PreviewAudio()
+	    {
+		    if(previewAudioGo == null)
+			    previewAudioGo = new GameObject("OneShotAudio");
+            
+		    previewAudioSound = previewAudioGo.AddComponent<AudioManagerSound>();
+		    previewAudioSound.audioSource = previewAudioSound.gameObject.AddComponent<AudioSource>();
+            
+		    var clipSound = sound;
+		    previewAudioSound.audioSource.clip = clipSound;
+		    previewAudioSound.audioSource.pitch = Pitch;
+		    previewAudioSound.audioSource.volume = Volume;
+
+		    previewAudioSound.audioSource.Play();
+
+		    EditorApplication.update += DestroyAudioPreview;
+		    Selection.selectionChanged += StopPreview;
+	    }
+
+	    [ShowIf(nameof(editorStillPlaying))]
+	    [Button(ButtonSizes.Large), HorizontalGroup]
+	    private void StopPreview()
+	    {
+		    previewProgress = 0f;
+		    editorStillPlaying = false;
+		    DestroyImmediate(previewAudioGo);
+		    previewAudioGo = null;
+            
+		    EditorApplication.update -= DestroyAudioPreview;
+		    Selection.selectionChanged -= StopPreview;
+	    }
+
+	    private void DestroyAudioPreview()
+        {
+            if (previewAudioSound != null && !previewAudioSound.audioSource.isPlaying)
+            {
+                // Destroy the temporary GameObject after the audio clip has finished playing
+                DestroyImmediate(previewAudioGo);
+                previewAudioGo = null;
+                editorStillPlaying = false;
+                previewProgress = 0f;
+
+                // Unsubscribe from the update to avoid unnecessary checks
+                EditorApplication.update -= DestroyAudioPreview;
+            }
+            else
+            {
+                editorStillPlaying = true;
+                if (previewAudioSound != null)
+                {
+                    previewProgress = previewAudioSound.audioSource.time / previewAudioSound.audioSource.clip.length;
+                }
+            }
+        }
+#endif
     }
 }

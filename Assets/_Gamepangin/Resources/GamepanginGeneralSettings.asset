@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c244fff1178d6aa45959d0e007a6e5e1, type: 3}
   m_Name: GamepanginGeneralSettings
   m_EditorClassIdentifier: 
-  menuDatabase: {fileID: 11400000, guid: a2121c6e5e7e7544594c916f9149b0a3, type: 2}
+  menuDatabase: {fileID: 0}
   databaseFolders: []

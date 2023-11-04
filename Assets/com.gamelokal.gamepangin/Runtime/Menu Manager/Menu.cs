@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 namespace Gamepangin
 {
@@ -10,13 +11,26 @@ namespace Gamepangin
         public static UnityEvent onOpen = new();
         public static UnityEvent onClose = new();
 
-        protected virtual void Awake()
+        public static bool IsActive => Instance.Canvas.enabled;
+
+        protected override void Awake()
         {
+            base.Awake();
             Instance = (T)this;
+
+            if (Instance.BackButton != null)
+            {
+                Instance.BackButton.onClick.AddListener(Close);
+            }
         }
 
         protected virtual void OnDestroy()
         {
+            if (Instance.BackButton != null)
+            {
+                Instance.BackButton.onClick.RemoveListener(Close);
+            }
+            
             Instance = null;
         }
 
@@ -27,16 +41,17 @@ namespace Gamepangin
                 MenuManager.Instance.CreateInstance(typeof(T).Name, out var clonedGameObject);
                 MenuManager.Instance.OpenMenu(clonedGameObject.GetMenu());
             }
-            else if (Instance.gameObject.activeInHierarchy)
+            else if (Instance.Canvas.enabled)
             {
                 Debug.LogWarning($"{Instance.gameObject.name} already opened");
                 return Instance;
             }
-            else
+            else if (!Instance.Canvas.enabled)
             {
-                Instance.gameObject.SetActive(true);
                 MenuManager.Instance.OpenMenu(Instance);
             }
+            
+            Instance.OnOpen();
             onOpen?.Invoke();
             return Instance;
         }
@@ -48,6 +63,7 @@ namespace Gamepangin
                 return;
             }
 
+            Instance.OnClose();
             onClose?.Invoke();
             MenuManager.Instance.CloseMenu(Instance);
         }
@@ -56,17 +72,44 @@ namespace Gamepangin
         {
             Close();
         }
+        
+        protected override void OnOpen(){ }
+        protected override void OnClose(){ }
     }
 
+    [RequireComponent(typeof(Canvas))]
     public abstract class Menu : MonoBehaviour
     {
-        [Tooltip("Destroy the Game Object when menu is closed (reduces memory usage)")]
-        public bool destroyWhenClosed = false;
+        [SerializeField] private bool resetAndDisableOnAwake = true;
 
-        [Tooltip("Disable menus that are under this one in the stack")]
-        [HideInInspector]
-        public bool disableMenusUnderneath = false;
+        [SerializeField] private bool closeOtherMenuWhenOpen = true;
+        public bool CloseOtherMenuWhenOpen => closeOtherMenuWhenOpen;
+        
+        [Tooltip("Destroy the Game Object when menu is closed (reduces memory usage)")]
+        [SerializeField] private bool destroyOnClosed = false;
+        [SerializeField] private Button backButton;
+        public Button BackButton => backButton;
+        public bool DestroyOnClosed => destroyOnClosed;
+
+        private Canvas canvas;
+        public Canvas Canvas => canvas;
+
+        protected virtual void Awake()
+        {
+            canvas = GetComponent<Canvas>();
+
+            if (resetAndDisableOnAwake)
+            {
+                canvas.enabled = false;
+                var rect = canvas.GetComponent<RectTransform>();
+                rect.anchoredPosition = Vector2.zero;
+            }
+        }
 
         public abstract void OnBackPressed();
+
+        protected abstract void OnOpen();
+
+        protected abstract void OnClose();
     }
 }
