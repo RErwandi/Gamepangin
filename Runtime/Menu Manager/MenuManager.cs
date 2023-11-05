@@ -15,9 +15,6 @@ namespace Gamepangin
 
         public List<Menu> MenuScreens => menuDatabase.MenuScreens;
 
-        [SerializeField]
-        private int startMenuIndex = -1;
-
         [ShowInInspector]
         private List<Menu> menuStack = new();
         private Menu LastMenu => menuStack[^1];
@@ -106,7 +103,8 @@ namespace Gamepangin
 
             if (menu.CloseOtherMenuWhenOpen)
             {
-                menuStack[^2].Canvas.enabled = true;
+                if(menuStack.Count > 1)
+                    menuStack[^2].Canvas.enabled = true;
             }
             
             CloseTopMenu();
