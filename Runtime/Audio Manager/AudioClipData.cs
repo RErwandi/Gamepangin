@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 namespace Gamepangin
 {
-	[CreateAssetMenu(order = 0, fileName = "Audio Clip Data", menuName = "Gamepangin/Audio/Clip Data")]
+	[CreateAssetMenu(order = 0, fileName = "New Audio Clip", menuName = "Gamepangin/Audio/Clip Data")]
     public class AudioClipData : DataDefinition<AudioClipData>
     {
 	    [Title("Sound")]
