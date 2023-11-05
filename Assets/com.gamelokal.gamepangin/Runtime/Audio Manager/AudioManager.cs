@@ -50,23 +50,23 @@ namespace Gamepangin
             PlaySound(clipData, location);
         }
 
-        private AudioClipSettings GetClipFromDatabase(string id)
+        private AudioClipData GetClipFromDatabase(string id)
         {
-            var allClips = AudioClipSettings.Definitions;
+            var allClips = AudioClipData.Definitions;
             return allClips.FirstOrDefault(clip => clip.Id.Equals(id));
         }
 
-        public virtual void PlaySound(AudioClipSettings clipSettings, Vector3 location = default)
+        public virtual void PlaySound(AudioClipData clipData, Vector3 location = default)
         {
-            if (clipSettings == null)
+            if (clipData == null)
             {
                 Debug.Log("Audio Clip is null");
                 return;
             }
             var audioSourceGo = pool.Spawn(transform);
             var audioSound = audioSourceGo.GetComponent<AudioManagerSound>();
-            var clip = clipSettings;
-            audioSound.id = clipSettings.Id.ToString();
+            var clip = clipData;
+            audioSound.id = clipData.Id.ToString();
 
             bool alreadyIn = false;
             foreach (var audioManagerSound in sounds)

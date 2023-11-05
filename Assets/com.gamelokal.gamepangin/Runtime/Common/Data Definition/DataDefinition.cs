@@ -1,6 +1,3 @@
-// Date Created: 25/06/23
-// Author: Reyz
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +9,11 @@ namespace Gamepangin
     {
         internal override bool IsUnique()
         {
+            if (string.IsNullOrEmpty(id))
+            {
+                id = Guid.NewGuid().ToString();
+            }
+            
             return Definitions
                 .Where(asset => asset != null)
                 .Where(asset => asset.GetInstanceID() != GetInstanceID())
@@ -27,7 +29,11 @@ namespace Gamepangin
             {
                 if (definitions == Array.Empty<T>())
                     LoadDefinitions();
-
+                
+#if UNITY_EDITOR
+                // Always refresh definitions in editor to caught new asset
+                LoadDefinitions();
+#endif
                 return definitions;
             }
         }
@@ -44,27 +50,7 @@ namespace Gamepangin
         }
         
         #region Accessing Methods
-        
-        /// <summary>
-        /// Tries to return a definition with the given id.
-        /// </summary>
-        public static bool TryGetWithId(UniqueId id, out T def)
-        {
-            def = GetWithId(id);
-            return def != null;
-        }
 
-        /// <summary>
-        /// Returns a definition with the given id.
-        /// </summary>
-        public static T GetWithId(UniqueId id)
-        {
-            if (DefinitionsById.TryGetValue(id.ToString(), out T def))
-                return def;
-
-            return null;
-        }
-        
         /// <summary>
         /// Tries to return a definition with the given id.
         /// </summary>
@@ -100,21 +86,7 @@ namespace Gamepangin
 
         private static void LoadDefinitions()
         {
-            string path = "Definitions/" + typeof(T).Name.Replace("Definition", "");
-
-            definitions = Resources.LoadAll<T>(path + "s");
-
-            if (definitions != null && definitions.Length > 0)
-                return;
-
-            path = path.Remove(path.Length - 1, 1) + "ies";
-            definitions = Resources.LoadAll<T>(path);
-
-            if (definitions != null && definitions.Length > 0)
-                return;
-
-            definitions = Resources.LoadAll<T>(path);
-
+            definitions = Resources.LoadAll<T>(typeof(T).Name);
             if (definitions != null && definitions.Length > 0)
                 return;
 
@@ -143,15 +115,5 @@ namespace Gamepangin
                 }
             }
         }
-        
-        #if UNITY_EDITOR
-        
-        public static void ReloadDefinitions()
-        {
-            LoadDefinitions();
-            CreateIdDefinitionsDict();
-        }
-        
-        #endif
     }
 }

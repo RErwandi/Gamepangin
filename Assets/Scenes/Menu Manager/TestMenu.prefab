@@ -32,7 +32,6 @@ RectTransform:
   m_Children:
   - {fileID: 1816362780509389134}
   m_Father: {fileID: 5989408443290909475}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -111,7 +110,6 @@ RectTransform:
   m_Children:
   - {fileID: 4398612264578225926}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -135,7 +133,9 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
   m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
@@ -191,8 +191,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96c992e7c7aa03244b631a38e41cc719, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyWhenClosed: 1
-  disableMenusUnderneath: 1
+  resetAndDisableOnAwake: 1
+  closeOtherMenuWhenOpen: 1
+  destroyOnClosed: 0
+  backButton: {fileID: 0}
 --- !u!1 &8407637767537539822
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,7 +226,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4398612264578225926}
-  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -259,9 +260,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Example Menu.
-
-    Press esc to back.'
+  m_text: Menu 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

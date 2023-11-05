@@ -18,7 +18,7 @@ namespace Gamepangin.Editor
         {
             var tree = new OdinMenuTree();
             tree.Config.DrawSearchToolbar = true;
-            tree.AddAllAssetsAtPath("Audio", GamepanginGeneralSettings.Instance.AudioFolderPath, typeof(AudioClipSettings), true);
+            tree.AddAllAssetsAtPath("Audio", GamepanginGeneralSettings.Instance.AudioFolderPath, typeof(AudioClipData), true);
             return tree;
         }
     }

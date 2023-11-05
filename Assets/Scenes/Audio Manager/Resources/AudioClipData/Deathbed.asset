@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16703da884c777e4fb4a4b9a5a7fd241, type: 3}
-  m_Name: Rainy Night
+  m_Name: Deathbed
   m_EditorClassIdentifier: 
-  id:
-    uniqueId: Rainy Night
-  sound: {fileID: 8300000, guid: 89f88f827a0bef046a8b59b10fc1d3cb, type: 3}
+  id: bgm-deathbed
+  sound: {fileID: 8300000, guid: 959560df64322cd4b86fbe3838687746, type: 3}
   useRandomSounds: 0
   randomSounds: []
   volume: {x: 1, y: 1}
@@ -43,3 +42,4 @@ MonoBehaviour:
   rolloffMode: 0
   minDistance: 1
   maxDistance: 500
+  previewProgress: 0

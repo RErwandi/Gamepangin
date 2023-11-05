@@ -4,24 +4,12 @@ using UnityEngine;
 
 public class TestMenu : Menu<TestMenu>
 {
-    private void OnEnable()
-    {
-        onOpen.AddListener(OnOpen);
-        onClose.AddListener(OnClose);
-    }
-
-    private void OnDisable()
-    {
-        onOpen.RemoveListener(OnOpen);
-        onClose.RemoveListener(OnClose);
-    }
-
-    private void OnOpen()
+    protected override void OnOpen()
     {
         Debug.Log("Opened");
     }
 
-    private void OnClose()
+    protected override void OnClose()
     {
         Debug.Log("Closed");
     }
