@@ -3,15 +3,14 @@ using UnityEngine;
 
 namespace Gamepangin
 {
-    [CreateAssetMenu(order = 0, fileName = "New Hook", menuName = "Gamepangin/Hook")]
-    public class HookData : DataDefinition<HookData>
+    public class HookData<T> : DataDefinition<HookData<T>>
     {
-        [SerializeField, ReadOnly] private GameObject gameObject;
+        [SerializeField, ReadOnly] private T reference;
 
-        public GameObject GameObject
+        public T Reference
         {
-            get => gameObject;
-            set => gameObject = value;
+            get => reference;
+            set => reference = value;
         }
     }
 }

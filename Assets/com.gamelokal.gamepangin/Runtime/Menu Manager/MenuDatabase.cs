@@ -3,7 +3,6 @@ using UnityEngine;
 
 namespace Gamepangin 
 {
-    [CreateAssetMenu(menuName = "Gamepangin/Menu Database", order = 0, fileName = "Menu Database.asset")]
     public class MenuDatabase : ScriptableObject
     {
         [SerializeField]
