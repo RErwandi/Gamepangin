@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   menuDatabase: {fileID: 0}
   audioFolderPath: 
+  itemsFolderPath: _Gamepangin/Resources/Items

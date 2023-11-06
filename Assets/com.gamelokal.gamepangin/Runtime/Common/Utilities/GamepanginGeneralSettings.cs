@@ -13,7 +13,10 @@ namespace Gamepangin
         public MenuDatabase menuDatabase;
         
         [FolderPath, SerializeField] private string audioFolderPath;
-        public string AudioFolderPath => string.IsNullOrEmpty(audioFolderPath) ? "_Gamepangin/Audio" : audioFolderPath;
+        public string AudioFolderPath => string.IsNullOrEmpty(audioFolderPath) ? "_Gamepangin/Resources/AudioClipData" : audioFolderPath;
+        
+        [FolderPath, SerializeField] private string itemsFolderPath;
+        public string ItemsFolderPath => string.IsNullOrEmpty(itemsFolderPath) ? "_Gamepangin/Resources/Items" : itemsFolderPath;
 
 #if UNITY_EDITOR
         private void CreateNewMenuDatabase()
