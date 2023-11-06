@@ -43,17 +43,17 @@ namespace Gamepangin
             pool.Preload = defaultPoolSize;
             pool.PreloadAll();
         }
-
-        public virtual void PlaySound(string id, Vector3 location = default)
-        {
-            var clipData = GetClipFromDatabase(id);
-            PlaySound(clipData, location);
-        }
-
-        private AudioClipData GetClipFromDatabase(string id)
+        
+        private AudioClipData GetClipById(string id)
         {
             var allClips = AudioClipData.Definitions;
             return allClips.FirstOrDefault(clip => clip.Id.Equals(id));
+        }
+
+        public virtual void PlaySound(string id, Vector3 location = default)
+        {
+            var clipData = GetClipById(id);
+            PlaySound(clipData, location);
         }
 
         public virtual void PlaySound(AudioClipData clipData, Vector3 location = default)
@@ -65,8 +65,6 @@ namespace Gamepangin
             }
             var audioSourceGo = pool.Spawn(transform);
             var audioSound = audioSourceGo.GetComponent<AudioManagerSound>();
-            var clip = clipData;
-            audioSound.id = clipData.Id.ToString();
 
             bool alreadyIn = false;
             foreach (var audioManagerSound in sounds)
@@ -82,28 +80,28 @@ namespace Gamepangin
                 sounds.Add(audioSound);
             }
             
-            var clipSound = clip.sound;
-            audioSound.persistent = clip.persistent;
-            audioSound.track = clip.audioTrack;
+            audioSound.id = clipData.Id;
+            audioSound.persistent = clipData.persistent;
+            audioSound.track = clipData.audioTrack;
             audioSound.audioSource.transform.position = location;
-            audioSound.audioSource.clip = clipSound;
-            audioSound.audioSource.pitch = clip.Pitch;
-            audioSound.audioSource.volume = clip.Volume;
-            audioSound.audioSource.spatialBlend = clip.spatialBlend;
-            audioSound.audioSource.panStereo = clip.panStereo;
-            audioSound.audioSource.loop = clip.loop;
-            audioSound.audioSource.bypassEffects = clip.bypassEffects;
-            audioSound.audioSource.bypassListenerEffects = clip.bypassListenerEffects;
-            audioSound.audioSource.bypassReverbZones = clip.bypassReverbZones;
-            audioSound.audioSource.priority = clip.priority;
-            audioSound.audioSource.reverbZoneMix = clip.reverbZoneMix;
-            audioSound.audioSource.dopplerLevel = clip.dopplerLevel;
-            audioSound.audioSource.spread = clip.spread;
-            audioSound.audioSource.rolloffMode = clip.rolloffMode;
-            audioSound.audioSource.minDistance = clip.minDistance;
-            audioSound.audioSource.maxDistance = clip.maxDistance;
+            audioSound.audioSource.clip = clipData.Sound;
+            audioSound.audioSource.pitch = clipData.Pitch;
+            audioSound.audioSource.volume = clipData.Volume;
+            audioSound.audioSource.spatialBlend = clipData.spatialBlend;
+            audioSound.audioSource.panStereo = clipData.panStereo;
+            audioSound.audioSource.loop = clipData.loop;
+            audioSound.audioSource.bypassEffects = clipData.bypassEffects;
+            audioSound.audioSource.bypassListenerEffects = clipData.bypassListenerEffects;
+            audioSound.audioSource.bypassReverbZones = clipData.bypassReverbZones;
+            audioSound.audioSource.priority = clipData.priority;
+            audioSound.audioSource.reverbZoneMix = clipData.reverbZoneMix;
+            audioSound.audioSource.dopplerLevel = clipData.dopplerLevel;
+            audioSound.audioSource.spread = clipData.spread;
+            audioSound.audioSource.rolloffMode = clipData.rolloffMode;
+            audioSound.audioSource.minDistance = clipData.minDistance;
+            audioSound.audioSource.maxDistance = clipData.maxDistance;
 
-            audioSound.audioSource.outputAudioMixerGroup = clip.audioTrack switch
+            audioSound.audioSource.outputAudioMixerGroup = clipData.audioTrack switch
             {
                 AudioManagerTracks.Master => masterAudioMixerGroup,
                 AudioManagerTracks.Music => musicAudioMixerGroup,
@@ -114,10 +112,17 @@ namespace Gamepangin
 
             audioSound.audioSource.Play();
 
-            if (!clip.loop && !clip.doNotAutoRecycleIfNotDonePlaying)
+            if (!clipData.loop && !clipData.doNotAutoRecycleIfNotDonePlaying)
             {
-                pool.Despawn(audioSourceGo, clipSound.length);
+                pool.Despawn(audioSourceGo, clipData.Sound.length);
             }
+        }
+        
+        public virtual void PauseSound(AudioClipData data)
+        {
+            var audioSource = FindById(data.Id);
+            if(audioSource)
+                audioSource.Pause();
         }
 
         public virtual void PauseSound(string id)
@@ -126,12 +131,24 @@ namespace Gamepangin
             if(audioSource)
                 audioSource.Pause();
         }
+        
+        public virtual void ResumeSound(AudioClipData data)
+        {
+            var audioSource = FindById(data.Id);
+            if(audioSource)
+                audioSource.Play();
+        }
 
         public virtual void ResumeSound(string id)
         {
             var audioSource = FindById(id);
             if(audioSource)
                 audioSource.Play();
+        }
+        
+        public virtual void StopSound(AudioClipData data)
+        {
+            StopSound(data.Id);
         }
 
         public virtual void StopSound(string id)

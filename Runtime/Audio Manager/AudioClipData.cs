@@ -124,9 +124,7 @@ namespace Gamepangin
             
 		    previewAudioSound = previewAudioGo.AddComponent<AudioManagerSound>();
 		    previewAudioSound.audioSource = previewAudioSound.gameObject.AddComponent<AudioSource>();
-            
-		    var clipSound = sound;
-		    previewAudioSound.audioSource.clip = clipSound;
+		    previewAudioSound.audioSource.clip = Sound;
 		    previewAudioSound.audioSource.pitch = Pitch;
 		    previewAudioSound.audioSource.volume = Volume;
 

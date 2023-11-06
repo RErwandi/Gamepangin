@@ -8,7 +8,7 @@ namespace Gamepangin
 	/// A class used to store options for AudioManager play
 	/// </summary>
 	[Serializable]
-	public struct AudioManagerPlayOptions
+	public struct AudioManagerOptions
 	{
 		/// the track on which to play the sound
 		public AudioManagerTracks audioTrack;
@@ -83,11 +83,11 @@ namespace Gamepangin
 		/// Here we initialize a new local options set, override its loop, location and track settings, and call a play event using it
 		/// 
 		/// </summary>
-		public static AudioManagerPlayOptions Default
+		public static AudioManagerOptions Default
 		{
 			get
 			{
-				var defaultOptions = new AudioManagerPlayOptions();
+				var defaultOptions = new AudioManagerOptions();
 				defaultOptions.audioTrack = AudioManagerTracks.Sfx;
 				defaultOptions.location = Vector3.zero;
 				defaultOptions.loop = false;
