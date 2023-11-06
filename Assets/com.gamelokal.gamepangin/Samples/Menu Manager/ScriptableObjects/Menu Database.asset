@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Menu Database
   m_EditorClassIdentifier: 
   menuScreens:
-  - {fileID: 1882778602505339800, guid: 0cbc9006cb2b27247969741aeec8454b, type: 3}
-  - {fileID: -6922560163307055668, guid: 1c451a5915085b54d8e52fa1a1907b1a, type: 3}
+  - {fileID: -7957086608422472464, guid: 1c451a5915085b54d8e52fa1a1907b1a, type: 3}
+  - {fileID: -2591698450470651911, guid: 0cbc9006cb2b27247969741aeec8454b, type: 3}
