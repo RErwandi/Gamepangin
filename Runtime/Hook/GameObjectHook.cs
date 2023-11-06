@@ -3,24 +3,24 @@ using UnityEngine;
 
 namespace Gamepangin
 {
-    public class Hook : MonoBehaviour
+    public class GameObjectHook : MonoBehaviour
     {
         [SerializeField] private GameObject reference;
 #if UNITY_EDITOR
         [InlineButton(nameof(CreateNewHookAsset), "+")]
 #endif
-        [SerializeField] private HookData hookData;
+        [SerializeField] private GameObjectHookData hookData;
         
         private void OnEnable()
         {
-            hookData.GameObject = reference;
+            hookData.Reference = reference;
         }
 
         private void OnDisable()
         {
-            if (hookData.GameObject == reference)
+            if (hookData.Reference == reference)
             {
-                hookData.GameObject = null;
+                hookData.Reference = null;
             }
         }
         
@@ -32,10 +32,10 @@ namespace Gamepangin
 #if UNITY_EDITOR
         private void CreateNewHookAsset()
         {
-            ScriptableObjectCreator.ShowDialog<HookData>("Assets/", OnSuccessCreateNewDatabase);
+            ScriptableObjectCreator.ShowDialog<GameObjectHookData>("Assets/", OnSuccessCreateNewDatabase);
         }
 
-        private void OnSuccessCreateNewDatabase(HookData so)
+        private void OnSuccessCreateNewDatabase(GameObjectHookData so)
         {
             hookData = so;
         }
