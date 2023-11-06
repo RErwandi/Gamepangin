@@ -10,16 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16703da884c777e4fb4a4b9a5a7fd241, type: 3}
-  m_Name: Rainy Night
+  m_Name: Random Sfx
   m_EditorClassIdentifier: 
-  id: bgm-rainy
-  sound: {fileID: 8300000, guid: 89f88f827a0bef046a8b59b10fc1d3cb, type: 3}
-  useRandomSounds: 0
-  randomSounds: []
+  id: sfx
+  sound: {fileID: 0}
+  useRandomSounds: 1
+  randomSounds:
+  - {fileID: 8300000, guid: 19f89c6e740e7447f9e12a8310d3e973, type: 3}
+  - {fileID: 8300000, guid: 0f998d65d9950cb41bb29cfd7123a6ae, type: 3}
   volume: {x: 1, y: 1}
   pitch: {x: 1, y: 1}
-  audioTrack: 2
-  loop: 1
+  audioTrack: 1
+  loop: 0
   persistent: 0
   doNotPlayIfClipAlreadyPlaying: 0
   doNotAutoRecycleIfNotDonePlaying: 0

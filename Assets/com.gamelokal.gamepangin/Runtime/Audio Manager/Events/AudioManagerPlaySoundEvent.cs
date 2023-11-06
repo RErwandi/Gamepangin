@@ -5,9 +5,9 @@ namespace Gamepangin
     public struct AudioManagerPlaySoundEvent
     {
         public AudioClip audioClip;
-        public AudioManagerPlayOptions options;
+        public AudioManagerOptions options;
 
-        public AudioManagerPlaySoundEvent(AudioClip audioClip, AudioManagerPlayOptions options)
+        public AudioManagerPlaySoundEvent(AudioClip audioClip, AudioManagerOptions options)
         {
             this.audioClip = audioClip;
             this.options = options;
@@ -15,7 +15,7 @@ namespace Gamepangin
 
         private static AudioManagerPlaySoundEvent _event;
 
-        public static void Trigger(AudioClip audioClip, AudioManagerPlayOptions options)
+        public static void Trigger(AudioClip audioClip, AudioManagerOptions options)
         {
             _event.audioClip = audioClip;
             _event.options = options;

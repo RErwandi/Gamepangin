@@ -118,14 +118,14 @@ public class AudioManagerDemo : MonoBehaviour
         uiSlider.value = AudioManager.Instance.state.uiVolume;
     }
 
-    public void PlayClip(string id)
+    public void PlayClip(AudioClipData data)
     {
-        AudioManager.Instance.PlaySound(id);
+        AudioManager.Instance.PlaySound(data);
     }
 
-    public void StopClip(string id)
+    public void StopClip(AudioClipData data)
     {
-        AudioManager.Instance.StopSound(id);
+        AudioManager.Instance.StopSound(data);
     }
 
     public void StopTrack(string trackId)

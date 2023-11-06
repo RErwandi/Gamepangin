@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16703da884c777e4fb4a4b9a5a7fd241, type: 3}
-  m_Name: Deathbed
+  m_Name: UI1
   m_EditorClassIdentifier: 
-  id: bgm-deathbed
-  sound: {fileID: 8300000, guid: 959560df64322cd4b86fbe3838687746, type: 3}
+  id: e05e972d-2a97-432e-bb99-6d16cbb98571
+  sound: {fileID: 8300000, guid: b849713e22f4fdf4dbc37cce9b421136, type: 3}
   useRandomSounds: 0
   randomSounds: []
   volume: {x: 1, y: 1}
   pitch: {x: 1, y: 1}
-  audioTrack: 2
-  loop: 1
+  audioTrack: 3
+  loop: 0
   persistent: 0
   doNotPlayIfClipAlreadyPlaying: 0
   doNotAutoRecycleIfNotDonePlaying: 0

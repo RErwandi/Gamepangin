@@ -1,8 +1,8 @@
 {
   "name": "com.gamelokal.gamepangin",
   "displayName": "Gamepangin",
-  "version": "1.1.4",
-  "unity": "2021.3",
+  "version": "2.0.0",
+  "unity": "2022.3",
   "description": "Game development made easy!",
   "documentationUrl": "https://gamepangin.gamelokal.com/",
   "changelogUrl": "https://gamepangin.gamelokal.com/gamepangin/changelog",
@@ -17,5 +17,17 @@
          "name": "Reynold Erwandi",
          "email": "reynolderwandi@gmail.com",
          "url": "https://erwandi.com/"
-   }
+   },
+  "samples": [
+    {
+      "displayName": "Menu Manager Example",
+      "description": "Example usage of menu manager",
+      "path": "Samples~/Menu Manager"
+    },
+    {
+      "displayName": "Audio Manager Example",
+      "description": "Example usage of audio manager",
+      "path": "Samples~/Audio Manager"
+    }
+  ]
 }
