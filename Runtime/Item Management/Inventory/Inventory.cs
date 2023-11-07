@@ -11,7 +11,6 @@ namespace Gamepangin
         [Tooltip("The initial item containers")]
         private ContainerGenerator[] startupContainers;
         
-        [SerializeField, ReadOnly]
         private List<ItemContainer> containers = new();
         
         public List<ItemContainer> Containers => containers;
