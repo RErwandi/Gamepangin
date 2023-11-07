@@ -20,7 +20,7 @@ namespace Gamepangin
         public string Id => id;
         
         internal abstract bool IsUnique();
-        
+
         public bool Equals(DataDefinitionBase other)
         {
             if (ReferenceEquals(null, other)) return false;
