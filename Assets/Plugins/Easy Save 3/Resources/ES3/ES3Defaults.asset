@@ -36,8 +36,6 @@ MonoBehaviour:
     - ES3
     - Gamepangin.Editor
     - Gamepangin.Runtime
-    - Sirenix.OdinInspector.CompatibilityLayer
-    - Sirenix.OdinInspector.CompatibilityLayer.Editor
     showAdvancedSettings: 1
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1

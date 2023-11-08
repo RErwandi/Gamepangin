@@ -95,6 +95,7 @@ namespace Gamepangin
             return false;
         }
         
+        [Button]
         public int RemoveItemsWithId(string itemId, int amountToRemove)
         {
             if (amountToRemove <= 0)

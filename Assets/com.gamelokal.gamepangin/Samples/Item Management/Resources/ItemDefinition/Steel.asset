@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Steel
   m_EditorClassIdentifier: 
   id: steel
-  icon: {fileID: 0}
+  icon: {fileID: -1648950584, guid: e9623f248659467499b468cb61ac8adc, type: 3}
   itemName: Steel
   itemPrefab: {fileID: 0}
   category: {fileID: 11400000, guid: 26fba25134c5b664f8d9e67672824d36, type: 2}

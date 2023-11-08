@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Wooden Sword
   m_EditorClassIdentifier: 
   id: wooden_sword
-  icon: {fileID: 0}
+  icon: {fileID: 131555593, guid: e9623f248659467499b468cb61ac8adc, type: 3}
   itemName: Wooden Sword
   itemPrefab: {fileID: 0}
   category: {fileID: 11400000, guid: b17ba696f372aef4a98d739759b69243, type: 2}
