@@ -9,7 +9,7 @@ namespace Gamepangin.UI
 {
     [SelectionBase]
     [DisallowMultipleComponent]
-    [AddComponentMenu("Gamepangin/UI/Selectables/SelectableUI")]
+    [AddComponentMenu("Gamepangin/UI/SelectableUI")]
     public class SelectableUI : UIBehaviour, IMoveHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
     {
         #region Internal
