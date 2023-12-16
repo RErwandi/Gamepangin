@@ -39,7 +39,9 @@ namespace Gamepangin
             get
             {
                 if (Properties == null)
+                {
                     return Definition.Weight * stackCount;
+                }
 
                 float weight = Definition.Weight;
                 foreach (var prop in Properties)

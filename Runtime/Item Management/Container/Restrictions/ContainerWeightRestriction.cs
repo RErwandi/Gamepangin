@@ -53,13 +53,13 @@ namespace Gamepangin
 			
             if (count == 1)
             {
-                if (m_TotalWeight + item.TotalWeight * count > m_MaxWeight)
+                if (m_TotalWeight + item.Definition.Weight * count > m_MaxWeight)
                     return 0;
             }
             else
             {
-                allowCount = (int)Mathf.Clamp(count, 0f, (m_MaxWeight - m_TotalWeight) / item.TotalWeight);
-
+                allowCount = (int)Mathf.Clamp(count, 0f, (m_MaxWeight - m_TotalWeight) / item.Definition.Weight * count);
+                
                 if (allowCount == 0)
                     return 0;
             }
