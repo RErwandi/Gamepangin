@@ -131,12 +131,14 @@ namespace Gamepangin
 		{
 			int allowedAmount = GetAllowedCount(itemDef, amount);
 			int added = 0;
+
+			if (allowedAmount == 0) return 0;
 			
 			// Go through each slot and see where we can add the item(s)
 			foreach (var slot in slots)
 			{
 				added += AddItemToSlot(slot, itemDef, allowedAmount - added);
-
+				
 				// We've added all the items, we can stop now
 				if (added == allowedAmount)
 					return added;

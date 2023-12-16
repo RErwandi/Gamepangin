@@ -3,7 +3,7 @@ using UnityEngine.EventSystems;
 
 namespace Gamepangin.UI
 {
-    public class ItemSlotUI : SlotUI<Item>, IBeginDragHandler, IDragHandler, IEndDragHandler
+    public class ItemSlotUI : SlotUI<Item>, IBeginDragHandler, IDragHandler, IEndDragHandler, ISelectHandler, IDeselectHandler
     {
         [SerializeField] private RectTransform dragTarget;
         [SerializeField] private CanvasGroup dragCanvasGroup;
@@ -50,16 +50,6 @@ namespace Gamepangin.UI
                 SetData(null);
 
             void OnSlotChanged(ItemSlot.CallbackContext context) => SetData(this.itemSlot.Item);
-        }
-
-        public void OnSelect()
-        {
-            isSelected = true;
-        }
-
-        public void OnDeselect()
-        {
-            isSelected = false;
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -116,6 +106,18 @@ namespace Gamepangin.UI
 
             dragTarget.SetParent(originalParent);
             dragTarget.anchoredPosition = originalPosition;
+        }
+
+        public void OnSelect(BaseEventData eventData)
+        {
+            isSelected = true;
+            
+            ItemSelectedEvent.Trigger(Item);
+        }
+
+        public void OnDeselect(BaseEventData eventData)
+        {
+            isSelected = false;
         }
     }
 }
