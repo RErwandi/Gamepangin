@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c09a4acd14b1a2c4780d767d62708d52, type: 3}
   m_Name: Wooden Sword
   m_EditorClassIdentifier: 
-  id: wooden_sword
+  id: sword
   icon: {fileID: 131555593, guid: e9623f248659467499b468cb61ac8adc, type: 3}
-  itemName: Wooden Sword
+  itemName: Sword
   itemPrefab: {fileID: 0}
   category: {fileID: 11400000, guid: b17ba696f372aef4a98d739759b69243, type: 2}
   description: A sword made of wood and steel
