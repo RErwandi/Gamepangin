@@ -180,11 +180,12 @@ namespace Gamepangin
 
 		public int RemoveItem(string id, int amount)
 		{
+			Debug.Log($"Trying to remove itemId {id} x{amount}");
 			int removed = 0;
 
 			foreach (var slot in slots)
 			{
-				if (!slot.HasItem || !slot.Item.Id.Equals(id))
+				if (!slot.HasItem || slot.Item.Id != id)
 					continue;
 				
 				removed += slot.Item.ChangeStack(-(amount - removed));

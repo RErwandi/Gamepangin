@@ -108,7 +108,7 @@ namespace Gamepangin
                 int removedNow = container.RemoveItem(itemId, amountToRemove);
                 removedInTotal += removedNow;
 
-                if (removedNow == removedInTotal)
+                if (removedInTotal == amountToRemove)
                     break;
             }
 
