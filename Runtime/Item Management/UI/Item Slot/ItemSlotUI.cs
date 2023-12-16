@@ -94,8 +94,16 @@ namespace Gamepangin.UI
                 if (slot != null)
                 {
                     var targetItemSlot = slot.itemSlot;
-                    if (targetItemSlot.Container.GetAllowedCount(itemSlot.Item, itemSlot.Item.StackCount,
-                            out string rejectReason) > 0)
+
+                    if (targetItemSlot.Item != null)
+                    {
+                        if (itemSlot.Container.GetAllowedCount(targetItemSlot.Item, targetItemSlot.Item.StackCount, out string rejectReason) <= 0)
+                        {
+                            Debug.Log($"Cant swap item because {rejectReason}");
+                        }
+                    }
+                    else if (targetItemSlot.Container.GetAllowedCount(itemSlot.Item, itemSlot.Item.StackCount,
+                                 out string rejectReason) > 0)
                     {
                         (targetItemSlot.Item, itemSlot.Item) = (itemSlot.Item, targetItemSlot.Item);
                     }
