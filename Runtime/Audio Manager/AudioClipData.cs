@@ -1,3 +1,5 @@
+#pragma warning disable CS0414
+
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEditor;

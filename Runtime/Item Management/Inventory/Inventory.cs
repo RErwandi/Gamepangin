@@ -69,15 +69,15 @@ namespace Gamepangin
         {
             if (amountToAdd <= 0)
                 return 0;
-            
+
             int addedInTotal = 0;
             
             foreach (var container in containers)
             {
-                int added = container.AddItem(itemId, amountToAdd);
+                int added = container.AddItem(itemId, amountToAdd - addedInTotal);
                 addedInTotal += added;
 
-                if (added == addedInTotal)
+                if (addedInTotal == amountToAdd)
                     break;
             }
 
