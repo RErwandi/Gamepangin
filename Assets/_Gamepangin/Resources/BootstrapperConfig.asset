@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a15d30110c360834b98dce3e69957280, type: 3}
+  m_Script: {fileID: 11500000, guid: ddf05117bd0e8dd41869cd917018638e, type: 3}
   m_Name: BootstrapperConfig
   m_EditorClassIdentifier: 
   prefabs: []

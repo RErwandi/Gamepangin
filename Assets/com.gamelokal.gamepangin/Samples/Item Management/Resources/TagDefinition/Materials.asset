@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49eca294fd405f542a755161f396c67e, type: 3}
+  m_Script: {fileID: 11500000, guid: 13cddacb032f3e940800d0f85f8481ac, type: 3}
   m_Name: Materials
   m_EditorClassIdentifier: 
   id: 84b66295-7044-44e9-a60c-d3210b2c561f
