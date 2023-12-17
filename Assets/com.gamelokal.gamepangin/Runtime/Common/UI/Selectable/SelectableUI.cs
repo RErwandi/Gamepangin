@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.Serialization;
 
 namespace Gamepangin.UI
 {
     [SelectionBase]
     [DisallowMultipleComponent]
-    [AddComponentMenu("Gamepangin/UI/SelectableUI")]
+    [AddComponentMenu("Gamepangin/UI/Selectable")]
     public class SelectableUI : UIBehaviour, IMoveHandler, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler, ISelectHandler
     {
         #region Internal
@@ -45,14 +44,14 @@ namespace Gamepangin.UI
 
         public event UnityAction<SelectableUI> OnSelected
         {
-            add => m_OnSelected.AddListener(value); 
-            remove => m_OnSelected.RemoveListener(value);
+            add => onSelected.AddListener(value); 
+            remove => onSelected.RemoveListener(value);
         }
         
         public event UnityAction<SelectableUI> OnDeselected
         {
-            add => m_OnDeselected.AddListener(value);
-            remove => m_OnDeselected.RemoveListener(value);
+            add => onDeselected.AddListener(value);
+            remove => onDeselected.RemoveListener(value);
         }
 
         /// <summary>
@@ -60,8 +59,8 @@ namespace Gamepangin.UI
         /// </summary>
         public NavigationUI Navigation
         {
-            get => m_Navigation;
-            set { if (SetStruct(ref m_Navigation, value)) DoStateTransition(CurrentSelectionState, false); }
+            get => navigation;
+            set { if (SetStruct(ref navigation, value)) DoStateTransition(CurrentSelectionState, false); }
         }
 
         /// <summary>
@@ -69,12 +68,12 @@ namespace Gamepangin.UI
         /// </summary>
         public bool IsSelectable
         {
-            get => m_IsSelectable && m_IsInteractable;
+            get => isSelectable && isInteractable;
             set
             {
-                if (value != m_IsSelectable)
+                if (value != isSelectable)
                 {
-                    m_IsSelectable = value;
+                    isSelectable = value;
                     DoStateTransition(CurrentSelectionState, false);
                 }
             }
@@ -84,11 +83,11 @@ namespace Gamepangin.UI
         {
             get
             {
-                if (m_IsPointerDown)
+                if (isPointerDown)
                     return SelectionState.Pressed;
-                if (m_HasParentGroup && m_ParentGroup.Selected == this)
+                if (hasParentGroup && parentGroup.Selected == this)
                     return SelectionState.Selected;
-                if (m_IsPointerInside)
+                if (isPointerInside)
                     return SelectionState.Highlighted;
                 return SelectionState.Normal;
             }
@@ -96,33 +95,32 @@ namespace Gamepangin.UI
 
         [Tooltip("Can this object be selected?")]
         [SerializeField]
-        protected bool m_IsSelectable = true;
+        protected bool isSelectable = true;
 
         // Navigation information.
-        [FormerlySerializedAs("navigation")]
         [SerializeField]
-        protected NavigationUI m_Navigation = NavigationUI.DefaultNavigation;
+        protected NavigationUI navigation = NavigationUI.DefaultNavigation;
 
         [SerializeReference]
-        protected IInteractableFeedbackUI[] m_Feedbacks = Array.Empty<IInteractableFeedbackUI>();
+        protected IInteractableFeedbackUI[] feedbacks = Array.Empty<IInteractableFeedbackUI>();
 
         [SerializeField]
-        protected SelectedEvent m_OnSelected;
+        protected SelectedEvent onSelected;
         
         [SerializeField]
-        protected SelectedEvent m_OnDeselected;
+        protected SelectedEvent onDeselected;
 
-        protected static SelectableUI[] s_Selectables = new SelectableUI[10];
-        protected static int s_SelectableCount = 0;
-        protected SelectableGroupBaseUI m_ParentGroup;
-        protected bool m_HasParentGroup;
-        protected bool m_EnableCalled = false;
-        protected int m_CurrentIndex = -1;
+        protected static SelectableUI[] selectables = new SelectableUI[10];
+        protected static int selectableCount = 0;
+        protected SelectableGroupBaseUI parentGroup;
+        protected bool hasParentGroup;
+        protected bool enableCalled = false;
+        protected int currentIndex = -1;
 
-        protected bool m_IsSelected;
-        protected bool m_IsPointerDown;
-        protected bool m_IsPointerInside;
-        protected bool m_IsInteractable = true;
+        protected bool isSelected;
+        protected bool isPointerDown;
+        protected bool isPointerInside;
+        protected bool isInteractable = true;
 
 
         protected SelectableUI()
@@ -133,7 +131,7 @@ namespace Gamepangin.UI
         /// </summary>
         public void Select()
         {
-            if (!m_IsSelectable || !m_IsInteractable)
+            if (!isSelectable || !isInteractable)
                 return;
 
             if (EventSystem.current != null && !EventSystem.current.alreadySelecting)
@@ -145,26 +143,26 @@ namespace Gamepangin.UI
         /// </summary>
         public virtual void Deselect()
         {
-            m_IsSelected = false;
+            isSelected = false;
             EvaluateAndTransitionToSelectionState();
             
-            m_OnDeselected.Invoke(this);
+            onDeselected.Invoke(this);
         }
 
         public virtual void OnSelect(BaseEventData eventData)
         {
-            if (!m_IsInteractable)
+            if (!isInteractable)
                 return;
 
             // Only select if there's a parent group.
-            if (m_HasParentGroup && !m_IsSelected && m_IsSelectable)
+            if (hasParentGroup && !isSelected && isSelectable)
             {
-                m_IsSelected = true;
-                m_ParentGroup.SelectSelectable(this);
+                isSelected = true;
+                parentGroup.SelectSelectable(this);
                 EvaluateAndTransitionToSelectionState();
             }
 
-            m_OnSelected.Invoke(this);
+            onSelected.Invoke(this);
         }
 
         /// <summary>
@@ -175,7 +173,7 @@ namespace Gamepangin.UI
             if (eventData.button != PointerEventData.InputButton.Left)
                 return;
 
-            m_IsPointerDown = true;
+            isPointerDown = true;
             EvaluateAndTransitionToSelectionState();
         }
 
@@ -188,10 +186,10 @@ namespace Gamepangin.UI
                 return;
 
             // Selection tracking
-            if (m_IsPointerInside && m_IsInteractable)
+            if (isPointerInside && isInteractable)
                 Select();
 
-            m_IsPointerDown = false;
+            isPointerDown = false;
             EvaluateAndTransitionToSelectionState();
         }
 
@@ -201,13 +199,13 @@ namespace Gamepangin.UI
         /// </summary>
         public void OnPointerEnter(PointerEventData eventData)
         {
-            m_IsPointerInside = true;
+            isPointerInside = true;
 
-            if (!m_IsSelected)
+            if (!isSelected)
                 EvaluateAndTransitionToSelectionState();
 
-            if (m_HasParentGroup)
-                m_ParentGroup.HighlightSelectable(this);
+            if (hasParentGroup)
+                parentGroup.HighlightSelectable(this);
         }
 
         /// <summary>
@@ -215,13 +213,13 @@ namespace Gamepangin.UI
         /// </summary>
         public void OnPointerExit(PointerEventData eventData)
         {
-            m_IsPointerInside = false;
+            isPointerInside = false;
 
-            if (!m_IsSelected)
+            if (!isSelected)
                 EvaluateAndTransitionToSelectionState();
 
-            if (m_HasParentGroup)
-                m_ParentGroup.HighlightSelectable(null);
+            if (hasParentGroup)
+                parentGroup.HighlightSelectable(null);
         }
 
         /// <summary>
@@ -241,26 +239,26 @@ namespace Gamepangin.UI
             float maxFurthestScore = Mathf.NegativeInfinity;
             float score = 0;
 
-            bool wantsWrapAround = m_Navigation.WrapAround && (m_Navigation.Mode == NavigationUI.ModeEnum.Vertical || m_Navigation.Mode == NavigationUI.ModeEnum.Horizontal);
+            bool wantsWrapAround = navigation.WrapAround && (navigation.Mode == NavigationUI.ModeEnum.Vertical || navigation.Mode == NavigationUI.ModeEnum.Horizontal);
 
             SelectableUI bestPick = null;
             SelectableUI bestFurthestPick = null;
 
-            for (int i = 0; i < s_SelectableCount; ++i)
+            for (int i = 0; i < selectableCount; ++i)
             {
-                SelectableUI sel = s_Selectables[i];
+                SelectableUI sel = selectables[i];
 
                 if (sel == this)
                     continue;
 
-                if (!sel.IsSelectable || sel.m_Navigation.Mode == NavigationUI.ModeEnum.None)
+                if (!sel.IsSelectable || sel.navigation.Mode == NavigationUI.ModeEnum.None)
                     continue;
 
-                if (sel.m_ParentGroup != m_ParentGroup)
+                if (sel.parentGroup != parentGroup)
                 {
-                    if (sel.m_HasParentGroup && m_HasParentGroup)
+                    if (sel.hasParentGroup && hasParentGroup)
                     {
-                        if (!(sel.m_ParentGroup.RegisteredSelectables == m_ParentGroup.RegisteredSelectables))
+                        if (!(sel.parentGroup.RegisteredSelectables == parentGroup.RegisteredSelectables))
                             continue;
                     }
                     else
@@ -334,10 +332,10 @@ namespace Gamepangin.UI
         /// </summary>
         public SelectableUI FindSelectableOnLeft()
         {
-            if (m_Navigation.Mode == NavigationUI.ModeEnum.Explicit)
-                return m_Navigation.SelectOnLeft;
+            if (navigation.Mode == NavigationUI.ModeEnum.Explicit)
+                return navigation.SelectOnLeft;
 
-            if ((m_Navigation.Mode & NavigationUI.ModeEnum.Horizontal) != 0)
+            if ((navigation.Mode & NavigationUI.ModeEnum.Horizontal) != 0)
                 return FindSelectable(transform.rotation * Vector3.left);
 
             return null;
@@ -348,10 +346,10 @@ namespace Gamepangin.UI
         /// </summary>
         public SelectableUI FindSelectableOnRight()
         {
-            if (m_Navigation.Mode == NavigationUI.ModeEnum.Explicit)
-                return m_Navigation.SelectOnRight;
+            if (navigation.Mode == NavigationUI.ModeEnum.Explicit)
+                return navigation.SelectOnRight;
 
-            if ((m_Navigation.Mode & NavigationUI.ModeEnum.Horizontal) != 0)
+            if ((navigation.Mode & NavigationUI.ModeEnum.Horizontal) != 0)
                 return FindSelectable(transform.rotation * Vector3.right);
 
             return null;
@@ -362,10 +360,10 @@ namespace Gamepangin.UI
         /// </summary>
         public SelectableUI FindSelectableOnUp()
         {
-            if (m_Navigation.Mode == NavigationUI.ModeEnum.Explicit)
-                return m_Navigation.SelectOnUp;
+            if (navigation.Mode == NavigationUI.ModeEnum.Explicit)
+                return navigation.SelectOnUp;
 
-            if ((m_Navigation.Mode & NavigationUI.ModeEnum.Vertical) != 0)
+            if ((navigation.Mode & NavigationUI.ModeEnum.Vertical) != 0)
                 return FindSelectable(transform.rotation * Vector3.up);
 
             return null;
@@ -376,10 +374,10 @@ namespace Gamepangin.UI
         /// </summary>
         public SelectableUI FindSelectableOnDown()
         {
-            if (m_Navigation.Mode == NavigationUI.ModeEnum.Explicit)
-                return m_Navigation.SelectOnDown;
+            if (navigation.Mode == NavigationUI.ModeEnum.Explicit)
+                return navigation.SelectOnDown;
 
-            if ((m_Navigation.Mode & NavigationUI.ModeEnum.Vertical) != 0)
+            if ((navigation.Mode & NavigationUI.ModeEnum.Vertical) != 0)
                 return FindSelectable(transform.rotation * Vector3.down);
 
             return null;
@@ -422,16 +420,16 @@ namespace Gamepangin.UI
         /// </summary>
         protected bool IsPressed()
         {
-            if (!IsActive() || !m_IsInteractable)
+            if (!IsActive() || !isInteractable)
                 return false;
 
-            return m_IsPointerDown;
+            return isPointerDown;
         }
 
         // Change the button to the correct state
         private void EvaluateAndTransitionToSelectionState()
         {
-            if (!IsActive() || !m_IsInteractable)
+            if (!IsActive() || !isInteractable)
                 return;
 
             DoStateTransition(CurrentSelectionState, false);
@@ -472,9 +470,9 @@ namespace Gamepangin.UI
             //if (!groupAllowInteraction && m_HasParentGroup && m_IsSelected)
             //    m_ParentGroup.SelectSelectable(null);
 
-            if (groupAllowInteraction != m_IsInteractable)
+            if (groupAllowInteraction != isInteractable)
             {
-                m_IsInteractable = groupAllowInteraction;
+                isInteractable = groupAllowInteraction;
                 DoStateTransition(CurrentSelectionState, true);
             }
         }
@@ -490,10 +488,10 @@ namespace Gamepangin.UI
 #endif
 
             var parent = transform.parent;
-            if (parent != null && parent.TryGetComponent(out m_ParentGroup))
+            if (parent != null && parent.TryGetComponent(out parentGroup))
             {
-                m_HasParentGroup = true;
-                m_ParentGroup.RegisterSelectable(this);
+                hasParentGroup = true;
+                parentGroup.RegisterSelectable(this);
             }
         }
 
@@ -504,37 +502,37 @@ namespace Gamepangin.UI
                 return;
 #endif
 
-            if (m_HasParentGroup)
-                m_ParentGroup.UnregisterSelectable(this);
+            if (hasParentGroup)
+                parentGroup.UnregisterSelectable(this);
         }
 
         // Select on enable and add to the list.
         protected override void OnEnable()
         {
             //Check to avoid multiple OnEnable() calls for each selectable
-            if (m_EnableCalled)
+            if (enableCalled)
                 return;
 
             base.OnEnable();
 
-            if (s_SelectableCount == s_Selectables.Length)
+            if (selectableCount == selectables.Length)
             {
-                SelectableUI[] temp = new SelectableUI[s_Selectables.Length * 2];
-                Array.Copy(s_Selectables, temp, s_Selectables.Length);
-                s_Selectables = temp;
+                SelectableUI[] temp = new SelectableUI[selectables.Length * 2];
+                Array.Copy(selectables, temp, selectables.Length);
+                selectables = temp;
             }
 
-            m_CurrentIndex = s_SelectableCount;
-            s_Selectables[m_CurrentIndex] = this;
-            s_SelectableCount++;
-            m_IsPointerDown = false;
+            currentIndex = selectableCount;
+            selectables[currentIndex] = this;
+            selectableCount++;
+            isPointerDown = false;
 
-            if (m_HasParentGroup && m_ParentGroup.Selected == this)
+            if (hasParentGroup && parentGroup.Selected == this)
                 OnSelect(null);
 
             DoStateTransition(CurrentSelectionState, true);
 
-            m_EnableCalled = true;
+            enableCalled = true;
         }
 
         // Remove from the list.
@@ -546,25 +544,25 @@ namespace Gamepangin.UI
 #endif
 
             //Check to avoid multiple OnDisable() calls for each selectable
-            if (!m_EnableCalled)
+            if (!enableCalled)
                 return;
 
-            s_SelectableCount--;
+            selectableCount--;
 
             // Update the last elements index to be this index
-            s_Selectables[s_SelectableCount].m_CurrentIndex = m_CurrentIndex;
+            selectables[selectableCount].currentIndex = currentIndex;
 
             // Swap the last element and this element
-            s_Selectables[m_CurrentIndex] = s_Selectables[s_SelectableCount];
+            selectables[currentIndex] = selectables[selectableCount];
 
             // null out last element.
-            s_Selectables[s_SelectableCount] = null;
+            selectables[selectableCount] = null;
 
             Deselect();
             InstantClearState();
             base.OnDisable();
 
-            m_EnableCalled = false;
+            enableCalled = false;
         }
 
         protected override void OnTransformParentChanged()
@@ -586,14 +584,14 @@ namespace Gamepangin.UI
         {
             enabled = true;
 
-            if (m_Feedbacks != null)
+            if (feedbacks != null)
             {
-                for (int i = 0; i < m_Feedbacks.Length; i++)
+                for (int i = 0; i < feedbacks.Length; i++)
                 {
-                    if (m_Feedbacks[i] == null)
-                        m_Feedbacks[i] = new ColorTintFeedbackUI();
+                    if (feedbacks[i] == null)
+                        feedbacks[i] = new ColorTintFeedbackUI();
 
-                    m_Feedbacks[i].OnValidate(this);
+                    feedbacks[i].OnValidate(this);
                 }
             }
 
@@ -612,9 +610,9 @@ namespace Gamepangin.UI
         /// </summary>
         protected virtual void InstantClearState()
         {
-            m_IsPointerInside = false;
-            m_IsPointerDown = false;
-            m_IsSelected = false;
+            isPointerInside = false;
+            isPointerDown = false;
+            isSelected = false;
 
             DoStateTransition(SelectionState.Normal, true);
         }
@@ -633,36 +631,36 @@ namespace Gamepangin.UI
             {
                 case SelectionState.Normal:
                     {
-                        for (int i = 0; i < m_Feedbacks.Length; i++)
+                        for (int i = 0; i < feedbacks.Length; i++)
                         {
-                            IInteractableFeedbackUI feedback = m_Feedbacks[i];
+                            IInteractableFeedbackUI feedback = feedbacks[i];
                             feedback.OnNormal(instant);
                         }
                         break;
                     }
                 case SelectionState.Highlighted:
                     {
-                        for (int i = 0; i < m_Feedbacks.Length; i++)
+                        for (int i = 0; i < feedbacks.Length; i++)
                         {
-                            IInteractableFeedbackUI feedback = m_Feedbacks[i];
+                            IInteractableFeedbackUI feedback = feedbacks[i];
                             feedback.OnHighlighted(instant);
                         }
                         break;
                     }
                 case SelectionState.Pressed:
                     {
-                        for (int i = 0; i < m_Feedbacks.Length; i++)
+                        for (int i = 0; i < feedbacks.Length; i++)
                         {
-                            IInteractableFeedbackUI feedback = m_Feedbacks[i];
+                            IInteractableFeedbackUI feedback = feedbacks[i];
                             feedback.OnPressed(instant);
                         }
                         break;
                     }
                 case SelectionState.Selected:
                     {
-                        for (int i = 0; i < m_Feedbacks.Length; i++)
+                        for (int i = 0; i < feedbacks.Length; i++)
                         {
-                            IInteractableFeedbackUI feedback = m_Feedbacks[i];
+                            IInteractableFeedbackUI feedback = feedbacks[i];
                             feedback.OnSelected(instant);
                         }
                         break;
