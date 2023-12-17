@@ -35,15 +35,18 @@ namespace Gamepangin
 
         private void OnValidate()
         {
-            itemsInCategory.Clear();
-            var allItems = DataDefinition<ItemDefinition>.Definitions;
-            foreach (var item in allItems)
+            EditorApplication.delayCall += () =>
             {
-                if (item.Category == this)
+                itemsInCategory.Clear();
+                var allItems = DataDefinition<ItemDefinition>.Definitions;
+                foreach (var item in allItems)
                 {
-                    itemsInCategory.Add(item);
+                    if (item.Category == this)
+                    {
+                        itemsInCategory.Add(item);
+                    }
                 }
-            }
+            };
         }
 #endif
     }
