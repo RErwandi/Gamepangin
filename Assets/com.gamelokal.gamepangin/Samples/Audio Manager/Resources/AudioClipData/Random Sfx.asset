@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65ecc07b0f28ae844982a91c2f5a87d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 16703da884c777e4fb4a4b9a5a7fd241, type: 3}
   m_Name: Random Sfx
   m_EditorClassIdentifier: 
   id: sfx

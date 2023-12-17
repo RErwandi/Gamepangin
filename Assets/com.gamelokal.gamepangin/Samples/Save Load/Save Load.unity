@@ -1118,7 +1118,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 770513251}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7be53c2763438b439b6d97f94afd41e, type: 3}
+  m_Script: {fileID: 11500000, guid: d1a227004441d0845baa43efaaef52b6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dataStorage: {fileID: 770513254}
@@ -1131,7 +1131,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 770513251}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b87af58fccaed064d82bb24a6ce52ab0, type: 3}
+  m_Script: {fileID: 11500000, guid: 42eb717649a60894787ddd2427dfa93d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   filename: save.json

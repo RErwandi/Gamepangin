@@ -36,7 +36,6 @@ MonoBehaviour:
     - ES3
     - Gamepangin.Editor
     - Gamepangin.Runtime
-    - jeffjadulco.guidregenerator
     showAdvancedSettings: 1
   addMgrToSceneAutomatically: 0
   autoUpdateReferences: 1
