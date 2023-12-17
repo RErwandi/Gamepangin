@@ -1,7 +1,7 @@
 {
   "name": "com.gamelokal.gamepangin",
   "displayName": "Gamepangin",
-  "version": "2.0.3",
+  "version": "2.0.5",
   "unity": "2022.3",
   "description": "Game development made easy!",
   "documentationUrl": "https://gamepangin.gamelokal.com/",
@@ -28,6 +28,11 @@
       "displayName": "Audio Manager Example",
       "description": "Example usage of audio manager",
       "path": "Samples~/Audio Manager"
+    },
+    {
+      "displayName": "Item Management Example",
+      "description": "Example usage of item management",
+      "path": "Samples~/Item Management"
     }
   ]
 }
