@@ -1,4 +1,5 @@
-using UnityEngine;
+  using UnityEditor.Graphs;
+  using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Gamepangin.UI
@@ -101,6 +102,13 @@ namespace Gamepangin.UI
                     {
                         Debug.Log($"Cant swap item because {rejectReason}");
                     }
+                }
+                
+                // Drop Item if dragged to GameObject with ItemDropUI.cs
+                ItemDropUI drop = eventData.pointerEnter.GetComponentInParent<ItemDropUI>();
+                if (drop != null)
+                {
+                    drop.Drop(Container, SlotIndex);
                 }
             }
 
