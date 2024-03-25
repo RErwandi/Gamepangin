@@ -178,6 +178,17 @@ namespace Gamepangin
 			return false;
 		}
 
+		public bool RemoveAtIndex(int index)
+		{
+			if (slots[index].HasItem)
+			{
+				slots[index].Item = null;
+				return true;
+			}
+
+			return false; 
+		}
+
 		public int RemoveItem(string id, int amount)
 		{
 			Debug.Log($"Trying to remove itemId {id} x{amount}");

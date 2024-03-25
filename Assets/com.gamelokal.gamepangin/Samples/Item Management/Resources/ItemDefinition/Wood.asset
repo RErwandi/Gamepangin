@@ -15,7 +15,7 @@ MonoBehaviour:
   id: wood
   icon: {fileID: -782085643, guid: e9623f248659467499b468cb61ac8adc, type: 3}
   itemName: Wood
-  itemPrefab: {fileID: 0}
+  itemPrefab: {fileID: 112714447486821080, guid: be9f841e96aa87447a1fc458531a5029, type: 3}
   category: {fileID: 11400000, guid: 26fba25134c5b664f8d9e67672824d36, type: 2}
   description: Everybody knows a wood
   notes: 

@@ -68,6 +68,7 @@ namespace Gamepangin
         public string Name => itemName;
         public Sprite Icon => icon;
         public string Description => description;
+        public GameObject Prefab => itemPrefab;
         public int StackSize => stackSize;
         public float Weight => weight;
         public ItemCategoryDefinition Category => category;
