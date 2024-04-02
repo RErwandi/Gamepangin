@@ -1,7 +1,11 @@
+using System;
+using System.IO;
 using Sirenix.OdinInspector;
 using Sirenix.Utilities;
+using Unity.Collections;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace Gamepangin
 {
@@ -13,9 +17,10 @@ namespace Gamepangin
         #if UNITY_EDITOR
 
         [InfoBox("Texture optimization only works for Default, Normal, and Sprite texture type")]
-        [FolderPath, Required, BoxGroup("Required")]
+        [FolderPath, Required, BoxGroup("Configuration")]
         public string rootFolder;
         
+        [InfoBox("Sprite texture always have mip map disabled")]
         [BoxGroup("Mip Map")]
         public bool generateMipmaps = true;
         [BoxGroup("Mip Map")]
@@ -26,10 +31,12 @@ namespace Gamepangin
         [BoxGroup("Size"), ValueDropdown("textureSizes"), ShowIf("overrideMaximumSize")]
         public int maximumSize = 2048;
         
+        [InfoBox("Image will be resized to nearest power of 4 to enable crunch compression")]
         [BoxGroup("Compression")]
         public bool useCrunchCompression;
         [BoxGroup("Compression"), Range(0, 100), ShowIf("useCrunchCompression")]
         public int compressionQuality = 50;
+        private bool autoResizeImage = true;
 
         [BoxGroup("Mobile")]
         public bool overrideAndroid;
@@ -42,11 +49,16 @@ namespace Gamepangin
         [Button(ButtonSizes.Gigantic), GUIColor(0, 1, 0)]
         public void OptimizeTextures()
         {
-            string targetDirectory = System.IO.Path.GetDirectoryName(rootFolder);
+            if (autoResizeImage)
+            {
+                ResizeImageInFolder(rootFolder);
+            }
+            
             int totalOptimized = 0;
 
             // Get all texture assets in the project.
-            string[] guids = AssetDatabase.FindAssets("t:texture", new[] { targetDirectory });
+            string[] guids = AssetDatabase.FindAssets("t:texture", new[] { rootFolder });
+            
             foreach (string guid in guids)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
@@ -65,10 +77,21 @@ namespace Gamepangin
                     if(textureImporter.textureType == TextureImporterType.Default || textureImporter.textureType == TextureImporterType.Sprite || textureImporter.textureType == TextureImporterType.NormalMap)
                     {
                         var prevTextureSize = textureImporter.maxTextureSize;
+
+                        textureImporter.npotScale = TextureImporterNPOTScale.ToNearest;
+                        
                         
                         // Mip Map Settings
-                        textureImporter.mipmapEnabled = generateMipmaps;
-                        textureImporter.streamingMipmaps = mipmapStreaming;
+                        if (textureImporter.textureType == TextureImporterType.Sprite)
+                        {
+                            textureImporter.mipmapEnabled = false;
+                            textureImporter.streamingMipmaps = false;
+                        }
+                        else
+                        {
+                            textureImporter.mipmapEnabled = generateMipmaps;
+                            textureImporter.streamingMipmaps = mipmapStreaming;
+                        }
                         
                         // Size Settings
                         if (overrideMaximumSize)
@@ -95,6 +118,16 @@ namespace Gamepangin
                         
                             textureImporter.SetPlatformTextureSettings(androidSettings);
                         }
+                        else
+                        {
+                            var androidSettings = new TextureImporterPlatformSettings
+                            {
+                                overridden = false,
+                                name = "Android"
+                            };
+                        
+                            textureImporter.SetPlatformTextureSettings(androidSettings);
+                        }
 
                         if (overrideIOS)
                         {
@@ -105,6 +138,16 @@ namespace Gamepangin
                                 maxTextureSize = prevTextureSize,
                                 format = mobileCompressionFormat,
                                 compressionQuality = compressionQuality
+                            };
+                        
+                            textureImporter.SetPlatformTextureSettings(iosSettings);
+                        }
+                        else
+                        {
+                            var iosSettings = new TextureImporterPlatformSettings
+                            {
+                                overridden = false,
+                                name = "iOS"
                             };
                         
                             textureImporter.SetPlatformTextureSettings(iosSettings);
@@ -124,7 +167,84 @@ namespace Gamepangin
                 }
             }
 
-            Debug.Log($"Texture Optimization in directory: {targetDirectory} success. {totalOptimized} textures has been optimized");
+            Debug.Log($"Texture Optimization in directory: {rootFolder} success. {totalOptimized} textures has been optimized");
+        }
+
+        private void ResizeImageInFolder(string path)
+        {
+            int resizedImages = 0;
+            string[] files = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+
+            foreach (string file in files)
+            {
+                string extension = Path.GetExtension(file).ToLower();
+                if (extension == ".jpg" || extension == ".png")
+                {
+                    if (TryResizeImage(file))
+                    {
+                        resizedImages++;
+                    }
+                }
+            }
+            
+            if(resizedImages > 0)
+                Debug.Log($"Successfully detect and resized {resizedImages} images to power of 4 to enable crunch compression");
+        }
+        
+        private bool TryResizeImage(string filePath)
+        {
+            try
+            {
+                var power = 4;
+                var fileFormat = Path.GetExtension(filePath).ToLower();
+                var fileData = File.ReadAllBytes(filePath);
+                
+                var tex = new Texture2D(2, 2);
+                tex.LoadImage(fileData);
+
+                // Do nothing if image size is match
+                if (tex.height % power == 0 && tex.width % power == 0)
+                {
+                    return false;
+                }
+                
+                var height = (int)Math.Round(tex.height / (float)power) * power;
+                var width = (int)Math.Round(tex.width / (float)power) * power;
+                
+                var resizeRT = RenderTexture.GetTemporary(width, height, 0);
+                Graphics.Blit(tex, resizeRT);
+                
+                var nArray = new NativeArray<byte>(width * height * 4, Allocator.Persistent, NativeArrayOptions.UninitializedMemory);
+                var request = AsyncGPUReadback.RequestIntoNativeArray (ref nArray, resizeRT, 0, (AsyncGPUReadbackRequest request) =>
+                {
+                    if (!request.hasError)
+                    {
+                        NativeArray<byte> encoded;
+ 
+                        switch (fileFormat)
+                        {
+                            case ".jpg":
+                                encoded = ImageConversion.EncodeNativeArrayToJPG(nArray, resizeRT.graphicsFormat, (uint)width, (uint)height, 0, 95);
+                                break;
+                            default:
+                                encoded = ImageConversion.EncodeNativeArrayToPNG(nArray, resizeRT.graphicsFormat, (uint)width, (uint)height);
+                                break;
+                        }
+ 
+                        File.WriteAllBytes(filePath, encoded.ToArray());
+                        encoded.Dispose();
+                    }
+ 
+                    nArray.Dispose();
+                });
+                
+                request.WaitForCompletion();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
 #endif
     }
