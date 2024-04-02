@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Gamepangin.Editor
 {
-    public class GamepanginEditorWindow : OdinMenuEditorWindow
+    public class GamepanginToolsWindow : OdinMenuEditorWindow
     {
-        [MenuItem("Gamepangin/Settings")]
+        [MenuItem("Gamepangin/Tools")]
         private static void OpenWindow()
         {
-            var window = GetWindow<GamepanginEditorWindow>();
+            var window = GetWindow<GamepanginToolsWindow>();
             window.minSize = new Vector2(800, 600);
             window.Show();
         }
@@ -19,6 +19,7 @@ namespace Gamepangin.Editor
             var tree = new OdinMenuTree();
             tree.Add("Editor", GamepanginGeneralSettings.Instance);
             tree.Add("Bootstrapper", BootstrapperConfig.Instance);
+            tree.Add("Batch Texture Optimization", BatchTextureOptimization.Instance);
             return tree;
         }
     }
