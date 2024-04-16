@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d20d8bf8202848d498c6c48a7c113bb6, type: 3}
   m_Name: BatchTextureOptimization
   m_EditorClassIdentifier: 
-  rootFolder: 
+  rootFolder: Assets
   generateMipmaps: 1
   mipmapStreaming: 1
-  overrideMaximumSize: 0
+  overrideMaximumSize: 1
   maximumSize: 2048
-  useCrunchCompression: 0
+  useCrunchCompression: 1
   compressionQuality: 50
   overrideAndroid: 0
   overrideIOS: 0
