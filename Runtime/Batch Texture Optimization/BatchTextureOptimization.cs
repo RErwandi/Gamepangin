@@ -241,6 +241,7 @@ namespace Gamepangin
             }
             catch (Exception ex)
             {
+                Debug.LogError($"Texture Optimization failed due to error: {ex.Message}");
                 return false;
             }
         }
