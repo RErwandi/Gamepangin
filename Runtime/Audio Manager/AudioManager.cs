@@ -60,9 +60,16 @@ namespace Gamepangin
         {
             if (clipData == null)
             {
-                Debug.Log("Audio Clip is null");
+                Debug.LogError("AudioClipData is null");
                 return;
             }
+
+            if (clipData.Sound == null)
+            {
+                Debug.LogError($"Sound is null in {clipData.name}", clipData);
+                return;
+            }
+            
             var audioSourceGo = pool.Spawn(transform);
             var audioSound = audioSourceGo.GetComponent<AudioManagerSound>();
 
