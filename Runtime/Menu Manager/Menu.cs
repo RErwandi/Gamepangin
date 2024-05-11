@@ -11,7 +11,7 @@ namespace Gamepangin
         public static UnityEvent onOpen = new();
         public static UnityEvent onClose = new();
 
-        public static bool IsActive => Instance.Canvas.enabled;
+        public static bool IsActive => Instance.gameObject.activeInHierarchy;
 
         protected override void Awake()
         {
@@ -41,12 +41,12 @@ namespace Gamepangin
                 MenuManager.Instance.CreateInstance(typeof(T).Name, out var clonedGameObject);
                 MenuManager.Instance.OpenMenu(clonedGameObject.GetMenu());
             }
-            else if (Instance.Canvas.enabled)
+            else if (IsActive)
             {
                 Debug.LogWarning($"{Instance.gameObject.name} already opened");
                 return Instance;
             }
-            else if (!Instance.Canvas.enabled)
+            else if (!IsActive)
             {
                 MenuManager.Instance.OpenMenu(Instance);
             }
@@ -86,23 +86,24 @@ namespace Gamepangin
         public bool CloseOtherMenuWhenOpen => closeOtherMenuWhenOpen;
         
         [Tooltip("Destroy the Game Object when menu is closed (reduces memory usage)")]
-        [SerializeField] private bool destroyOnClosed = false;
+        [SerializeField] private bool destroyOnClosed;
         [SerializeField] private Button backButton;
         public Button BackButton => backButton;
         public bool DestroyOnClosed => destroyOnClosed;
-
+        
+        
         private Canvas canvas;
         public Canvas Canvas => canvas;
 
         protected virtual void Awake()
         {
             canvas = GetComponent<Canvas>();
-
+            
             if (resetAndDisableOnAwake)
             {
-                canvas.enabled = false;
-                var rect = canvas.GetComponent<RectTransform>();
+                var rect = gameObject.GetComponent<RectTransform>();
                 rect.anchoredPosition = Vector2.zero;
+                gameObject.SetActive(false);
             }
         }
 

@@ -58,11 +58,11 @@ namespace Gamepangin
             {
                 foreach (var menu in menuStack)
                 {
-                    menu.Canvas.enabled = false;
+                    menu.gameObject.SetActive(false);
                 }
             }
 
-            menuInstance.Canvas.enabled = true;
+            menuInstance.gameObject.SetActive(true);
             if (menuStack.Contains(menuInstance))
             {
                 menuStack.Remove(menuInstance);
@@ -103,8 +103,8 @@ namespace Gamepangin
 
             if (menu.CloseOtherMenuWhenOpen)
             {
-                if(menuStack.Count > 1)
-                    menuStack[^2].Canvas.enabled = true;
+                if (menuStack.Count > 1)
+                    menuStack[^2].gameObject.SetActive(true);
             }
             
             CloseTopMenu();
@@ -115,7 +115,7 @@ namespace Gamepangin
             if (LastMenu.DestroyOnClosed)
                 Destroy(LastMenu.gameObject);
             else
-                LastMenu.Canvas.enabled = false;
+                LastMenu.gameObject.SetActive(false);
 
             menuStack.RemoveAt(menuStack.Count - 1);
         }
