@@ -77,9 +77,6 @@ namespace Gamepangin
                     if(textureImporter.textureType == TextureImporterType.Default || textureImporter.textureType == TextureImporterType.Sprite || textureImporter.textureType == TextureImporterType.NormalMap)
                     {
                         var prevTextureSize = textureImporter.maxTextureSize;
-
-                        textureImporter.npotScale = TextureImporterNPOTScale.ToNearest;
-                        
                         
                         // Mip Map Settings
                         if (textureImporter.textureType == TextureImporterType.Sprite)
@@ -91,6 +88,7 @@ namespace Gamepangin
                         {
                             textureImporter.mipmapEnabled = generateMipmaps;
                             textureImporter.streamingMipmaps = mipmapStreaming;
+                            textureImporter.npotScale = TextureImporterNPOTScale.ToNearest;
                         }
                         
                         // Size Settings
