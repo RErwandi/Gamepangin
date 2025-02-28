@@ -1,6 +1,5 @@
 #pragma warning disable CS0414
 
-using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEditor;
 using UnityEngine;
@@ -49,9 +48,9 @@ namespace Gamepangin
 		[Tooltip("if fading, the duration of the fade, in seconds")]
 		[FoldoutGroup("Fade")]
 		public float fadeDuration = 1f;
-		[Tooltip("if fading, the tween over which to fade the sound ")]
-		[FoldoutGroup("Fade")]
-		public Ease fadeEase = Ease.InOutQuart;
+		//[Tooltip("if fading, the tween over which to fade the sound ")]
+		//[FoldoutGroup("Fade")]
+		//public Ease fadeEase = Ease.InOutQuart;
 		
 		[FoldoutGroup("Solo")]
 		[Tooltip("whether or not this sound should play in solo mode over its destination track. If yes, all other sounds on that track will be muted when this sound starts playing")]

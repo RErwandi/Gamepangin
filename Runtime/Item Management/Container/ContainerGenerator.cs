@@ -28,6 +28,9 @@ namespace Gamepangin
 
         [SerializeField] [Tooltip("Only items with the specified properties can be added.")]
         private List<ItemPropertyDefinition> requiredProperties = new();
+        
+        [Title("Default Items")]
+        [SerializeField] private List<ItemHolder> defaultItems = new();
 
 
         public ItemContainer GenerateContainer()
@@ -35,7 +38,8 @@ namespace Gamepangin
             var container = new ItemContainer(
                 containerName,
                 maxSize,
-                GetAllRestrictions()
+                GetAllRestrictions(),
+                defaultItems
             );
 
             return container;

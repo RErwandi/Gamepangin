@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Fusion;
 using Sirenix.OdinInspector;
 using UnityEngine;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -23,12 +25,14 @@ namespace Gamepangin
         
         [BoxGroup(LEFT_VERTICAL_GROUP + "/General Settings")]
         [VerticalGroup(GENERAL_SETTINGS_VERTICAL_GROUP)]
-        [SerializeField, InlineButton("UpdateFilename")] private string itemName;
+        [SerializeField, InlineButton("UpdateFilename")]
+        [OnValueChanged(nameof(OnItemNameChanged))]
+        private string itemName;
 
         [AssetsOnly]
         [VerticalGroup(GENERAL_SETTINGS_VERTICAL_GROUP)]
         [SerializeField]
-        private GameObject itemPrefab;
+        private NetworkObject itemPrefab;
         
         [VerticalGroup(GENERAL_SETTINGS_VERTICAL_GROUP)]
         //[ValueDropdown(Constants.EDITOR_ALL_ITEM_CATEGORY, FlattenTreeView = true)]
@@ -68,7 +72,7 @@ namespace Gamepangin
         public string Name => itemName;
         public Sprite Icon => icon;
         public string Description => description;
-        public GameObject Prefab => itemPrefab;
+        public NetworkObject Prefab => itemPrefab;
         public int StackSize => stackSize;
         public float Weight => weight;
         public ItemCategoryDefinition Category => category;
@@ -182,6 +186,44 @@ namespace Gamepangin
 
             return false;
         }
+
+        public bool GetProperty(string propertyId, out ItemProperty itemProperty)
+        {
+            if (HasProperty(propertyId))
+            {
+                foreach (var prop in Properties)
+                {
+                    if (prop.Id.Equals(propertyId))
+                    {
+                        itemProperty = prop;
+                        return true;
+                    }
+                }
+            }
+
+            itemProperty = null;
+            return false;
+        }
+        public ItemProperty GetProperty(string propertyId)
+        {
+            if (GetProperty(propertyId, out ItemProperty itemProperty))
+            {
+                return itemProperty;
+            }
+
+            return null;
+        }
+
+        public ItemProperty SetNutritionProperty(float amount)
+        {
+            if (GetProperty("properties-nutrition", out ItemProperty itemProperty))
+            {
+                itemProperty.Float = amount;
+                return itemProperty;
+            }
+
+            return null;
+        }
         
         #endregion
 
@@ -196,5 +238,11 @@ namespace Gamepangin
             AssetDatabase.Refresh();
         }
 #endif
+        
+        private void OnItemNameChanged()
+        {
+            var formattedString = itemName.ToLower().Replace(" ", "-");
+            id = $"item-{formattedString}";
+        }
     }
 }

@@ -1,25 +1,15 @@
 using System;
-using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
-
-#if UNITY_EDITOR
-using UnityEditor;
-using UnityEditor.Build;
-#endif
 
 
 namespace Gamepangin
 {
     public abstract class DataDefinitionBase : ScriptableObject, IEquatable<DataDefinitionBase>
     {
-        [Title("Identifier")]
-        [ValidateInput("IsUnique", "Id has been used in another asset in this definition")]
-        [SerializeField] protected string id;
+        [Title("Identifier")] [SerializeField] protected string id;
 
         public string Id => id;
-        
-        internal abstract bool IsUnique();
 
         public bool Equals(DataDefinitionBase other)
         {
@@ -51,33 +41,17 @@ namespace Gamepangin
             return !Equals(left, right);
         }
 
-#if UNITY_EDITOR
-        public class DataChecker : BuildPlayerProcessor
+        private void OnValidate()
         {
-            public override int callbackOrder => -1;
-
-            public override void PrepareForBuild(BuildPlayerContext buildPlayerContext)
+            // If the ID is empty or duplicated, generate a new one.
+            if (string.IsNullOrEmpty(id))
             {
-                var ids = new HashSet<string>();
-
-                var guids = AssetDatabase.FindAssets("t:" + typeof(DataDefinitionBase));
-                foreach (var guid in guids)
-                {
-                    var path = AssetDatabase.GUIDToAssetPath(guid);
-                    var so = AssetDatabase.LoadAssetAtPath<DataDefinitionBase>(path);
-                    if (string.IsNullOrEmpty(so.Id))
-                    {
-                        Debug.LogError("There are Data Definition without Id", so);
-                        throw new Exception();
-                    }
-                    if (!ids.Add(so.Id))
-                    {
-                        Debug.LogError("There are Data Definition with duplicated Id", so);
-                        throw new Exception();
-                    }
-                }
+                id = Guid.NewGuid().ToString("N");
+#if UNITY_EDITOR
+                // Save changes in the editor.
+                UnityEditor.EditorUtility.SetDirty(this);
+#endif
             }
         }
-#endif
     }
 }

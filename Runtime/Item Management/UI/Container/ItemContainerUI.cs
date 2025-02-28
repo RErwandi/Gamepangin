@@ -48,7 +48,7 @@ namespace Gamepangin.UI
 	        }
         }
 
-        public void AttachToContainer(ItemContainer container)
+        public virtual void AttachToContainer(ItemContainer container)
         {
             if (container == null)
             {
@@ -60,14 +60,13 @@ namespace Gamepangin.UI
                 GenerateSlots(container.Capacity);
 
             itemContainer = container;
-            for (int i = 0; i < container.Capacity; i++)
-                slots[i].SetItemSlot(container[i], i);
+	        SetItems();
 
             isAttached = true;
             onContainerAttached?.Invoke(itemContainer);
         }
 
-        public void DetachFromContainer()
+        public virtual void DetachFromContainer()
         {
             if (itemContainer == null)
                 return;
@@ -76,6 +75,34 @@ namespace Gamepangin.UI
                 slots[i].SetItemSlot(null, i);
 
             isAttached = false;
+        }
+
+        protected void SetItems()
+        {
+	        if (itemContainer == null)
+	        {
+		        Debug.LogError("Item container is null", gameObject);
+		        return;
+	        }
+
+	        int iSlot = 0;
+	        for (int i = 0; i < itemContainer.Capacity; i++)
+	        {
+		        if (CanBeShown(itemContainer[i]))
+		        {
+			        slots[iSlot].SetItemSlot(itemContainer[i], iSlot);
+			        iSlot++;
+		        }
+		        else
+		        {
+			        slots[i].SetItemSlot(null, iSlot);
+		        }
+	        }
+        }
+
+        protected virtual bool CanBeShown(ItemSlot itemSlot)
+        {
+	        return true;
         }
 		
 		[Button(ButtonSizes.Medium, Name = "Generate Default Slots")]

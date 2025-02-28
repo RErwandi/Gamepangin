@@ -1,5 +1,4 @@
 using System;
-using DG.Tweening;
 using UnityEngine;
 
 namespace Gamepangin
@@ -25,7 +24,7 @@ namespace Gamepangin
 		/// the duration of the fade, in seconds
 		public float fadeDuration;
 		/// the tween to use when fading the sound
-		public Ease fadeEase;
+		//public Ease fadeEase;
 		/// whether or not the sound should persist over scene transitions
 		public bool persistent;
 		/// an AudioSource to use if you don't want to pick one from the pool
@@ -95,7 +94,7 @@ namespace Gamepangin
 				defaultOptions.fade = false;
 				defaultOptions.fadeInitialVolume = 0f;
 				defaultOptions.fadeDuration = 1f;
-				defaultOptions.fadeEase = Ease.InOutQuart;
+				//defaultOptions.fadeEase = Ease.InOutQuart;
 				defaultOptions.persistent = false;
 				defaultOptions.recycleAudioSource = null;
 				defaultOptions.pitch = 1f;

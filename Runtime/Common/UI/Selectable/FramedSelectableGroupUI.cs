@@ -30,7 +30,7 @@ namespace Gamepangin.UI
 
         private RectTransform frame;
         private bool frameActive = true;
-
+        private SelectableUI lastSelectable;
 
         protected override void OnSelectedChanged(SelectableUI selectable)
         {
@@ -42,6 +42,16 @@ namespace Gamepangin.UI
                 EnableFrame(false);
                 return;
             }
+
+            if (lastSelectable != null)
+            {
+                if (lastSelectable.TryGetComponent<ItemSlotUI>(out var slotUI))
+                {
+                    slotUI.IsSelected = false;
+                }
+            }
+
+            lastSelectable = selectable;
             
             EnableFrame(true);
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -12,15 +13,19 @@ namespace Gamepangin
     public class ItemCategoryDefinition : DataDefinition<ItemCategoryDefinition>
     {
         [Title("Category")]
-        [SerializeField, InlineButton("UpdateFilename")] private string categoryName;
+        [SerializeField, InlineButton("UpdateFilename")]
+        [OnValueChanged(nameof(OnNameChanged))]
+        private string categoryName;
         [SerializeField] private Sprite icon;
         [SerializeField] private Color frameColor = Color.gray;
         [SerializeField] private Color frameTextColor = Color.white;
         [SerializeField] private ItemTagDefinition defaultTag;
+        [SerializeField] private ItemAction[] baseActions = Array.Empty<ItemAction>();
         [ShowInInspector, ReadOnly] private List<ItemDefinition> itemsInCategory = new();
 
         public string Name => categoryName;
         public Sprite Icon => icon;
+        public ItemAction[] BaseActions => baseActions;
 
 #if UNITY_EDITOR
         private void UpdateFilename()
@@ -49,5 +54,11 @@ namespace Gamepangin
             };
         }
 #endif
+        
+        private void OnNameChanged()
+        {
+            var formattedString = categoryName.ToLower().Replace(" ", "-");
+            id = $"category-{formattedString}";
+        }
     }
 }

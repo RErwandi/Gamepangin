@@ -5,8 +5,10 @@ using UnityEngine.Events;
 
 namespace Gamepangin
 {
-    public class Inventory : MonoBehaviour, IInventory
+    public class Inventory : SerializedMonoBehaviour, IInventory
     {
+        [SerializeField] private Dictionary<Currency, int> currencies = new();
+        
         [SerializeField]
         [Tooltip("The initial item containers")]
         private ContainerGenerator[] startupContainers;
@@ -19,9 +21,25 @@ namespace Gamepangin
         public event UnityAction InventoryChanged;
         public event UnityAction<ItemSlot.CallbackContext> ItemChanged;
         public event UnityAction ContainersCountChanged;
+        public event UnityAction CurrencyChanged;
         
         private void OnInventoryChanged() => InventoryChanged?.Invoke();
         private void OnItemChanged(ItemSlot.CallbackContext context) => ItemChanged?.Invoke(context);
+        
+        private void Awake()
+        {
+            if (containers.Count > 0)
+            {
+                return;
+            }
+
+            containers = new List<ItemContainer>();
+            for (int i = 0; i < startupContainers.Length; i++)
+            {
+                var container = startupContainers[i].GenerateContainer();
+                AddContainer(container, false);
+            }
+        }
         
         public void AddContainer(ItemContainer container, bool triggerContainersEvent = true)
         {
@@ -64,7 +82,6 @@ namespace Gamepangin
             return addedInTotal;
         }
         
-        [Button]
         public int AddItemsWithId(string itemId, int amountToAdd)
         {
             if (amountToAdd <= 0)
@@ -80,7 +97,7 @@ namespace Gamepangin
                 if (addedInTotal == amountToAdd)
                     break;
             }
-
+            
             return addedInTotal;
         }
         
@@ -95,13 +112,14 @@ namespace Gamepangin
             return false;
         }
         
-        [Button]
         public int RemoveItemsWithId(string itemId, int amountToRemove)
         {
             if (amountToRemove <= 0)
                 return 0;
 
             int removedInTotal = 0;
+
+            if (GetItemsWithIdCount(itemId) <= 0) { return 0; }
 
             foreach (var container in containers)
             {
@@ -123,6 +141,52 @@ namespace Gamepangin
                 count += container.GetItemCount(itemId);
 
             return count;
+        }
+
+        public List<ItemDefinition> GetAllItemDefinitions()
+        {
+            List<ItemDefinition> allItems = new List<ItemDefinition>();
+
+            foreach (var container in Containers)
+            {
+                foreach (var slot in container.Slots)
+                {
+                    if (slot.HasItem)
+                    {
+                        allItems.Add(slot.Item.Definition);
+                    }
+                }
+            }
+
+            return allItems;
+        }
+
+        public List<Item> GetAllItems()
+        {
+            List<Item> allItems = new List<Item>();
+
+            foreach (var container in Containers)
+            {
+                foreach (var slot in container.Slots)
+                {
+                    if (slot.HasItem)
+                    {
+                        allItems.Add(slot.Item);
+                    }
+                }
+            }
+
+            return allItems;
+        }
+
+        public void ClearInventory()
+        {
+            foreach (var container in containers)
+            {
+                container.RemoveAllItems();
+            }
+
+            OnInventoryChanged();
         }
 
         public bool ContainsItem(Item item)
@@ -149,20 +213,74 @@ namespace Gamepangin
 
             containers.Clear();
         }
-        
-        private void Awake()
-        {
-            if (containers.Count > 0)
-            {
-                return;
-            }
 
-            containers = new List<ItemContainer>();
-            for (int i = 0; i < startupContainers.Length; i++)
+        #region Currency
+
+        public void AddCurrency(Currency currency, int amount)
+        {
+            if (currencies.TryGetValue(currency, out var currentAmount))
             {
-                var container = startupContainers[i].GenerateContainer();
-                AddContainer(container, false);
+                currentAmount += amount;
+                currencies[currency] = currentAmount;
+            }
+            else
+            {
+                currencies.TryAdd(currency, amount);
+            }
+            
+            CurrencyChanged?.Invoke();
+        }
+
+        public void AddCurrency(string currencyId, int amount)
+        {
+            if (Currency.TryGetWithId(currencyId, out var currency))
+            {
+                AddCurrency(currency, amount);
             }
         }
+        
+        public void SubtractCurrency(Currency currency, int amount)
+        {
+            if (currencies.TryGetValue(currency, out var currentAmount))
+            {
+                currentAmount = Mathf.Clamp(currentAmount - amount, 0, currentAmount);
+                currencies[currency] = currentAmount;
+            }
+            else
+            {
+                currencies.TryAdd(currency, 0);
+            }
+            
+            CurrencyChanged?.Invoke();
+        }
+
+        public void SubtractCurrency(string currencyId, int amount)
+        {
+            if (Currency.TryGetWithId(currencyId, out var currency))
+            {
+                SubtractCurrency(currency, amount);
+            }
+        }
+
+        public bool SpentCurrency(Currency currency, int amount)
+        {
+            if (currencies.TryGetValue(currency, out var currentAmount))
+            {
+                if (currentAmount <= amount)
+                {
+                    SubtractCurrency(currency, amount);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public int GetCurrency(Currency currency)
+        {
+            return currencies.GetValueOrDefault(currency, 0);
+        }
+
+        #endregion
     }
 }
