@@ -20,8 +20,9 @@ namespace Gamepangin
         
         public event UnityAction ContainerChanged;
         public event UnityAction<ItemSlot.CallbackContext> SlotChanged;
+        public event UnityAction<ItemDefinition, int> ItemsAdded;
         
-        public ItemContainer(string name, int size, List<ContainerRestriction> restrictions)
+        public ItemContainer(string name, int size, List<ContainerRestriction> restrictions, List<ItemHolder> items = null)
         {
             containerName = name;
 
@@ -36,6 +37,15 @@ namespace Gamepangin
                 restriction.OnInitialized(this);
 
             CreateSlots();
+
+            if (items != null)
+            {
+	            foreach (var item in items)
+	            {
+		            if(item.item == null) continue;
+		            AddItem(new Item(item.item, item.amount));
+	            }
+            }
         }
         
         public void OnLoad()
@@ -120,6 +130,7 @@ namespace Gamepangin
 				if (!slot.HasItem)
 				{
 					slot.Item = item;
+					ItemsAdded?.Invoke(slot.Item.Definition, 1);
 					return 1;
 				}
 			}
@@ -141,9 +152,13 @@ namespace Gamepangin
 				
 				// We've added all the items, we can stop now
 				if (added == allowedAmount)
+				{
+					ItemsAdded?.Invoke(itemDef, added);
 					return added;
+				}
 			}
-
+			
+			ItemsAdded?.Invoke(itemDef, added);
 			return added;
 		}
 
@@ -162,6 +177,19 @@ namespace Gamepangin
 			// If the slot is empty, create a new item.
 			slot.Item = new Item(itemDef, amount);
 			return slot.Item.StackCount;
+		}
+
+		public void RemoveAllItems()
+		{
+			foreach (var slot in slots)
+			{
+				if (slot.HasItem)
+				{
+					slot.Item = null;
+				}
+			}
+
+			Debug.Log("All items have been removed from the container.");
 		}
 
 		public bool RemoveItem(Item item)

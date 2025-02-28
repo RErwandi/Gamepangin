@@ -9,7 +9,7 @@ namespace Gamepangin
     [CreateAssetMenu(order = 0, fileName = "New Item Property", menuName = "Gamepangin/Inventory/Item Property")]
     public class ItemPropertyDefinition : DataDefinition<ItemPropertyDefinition>
     {
-        [InlineButton("UpdateFilename")]
+        [InlineButton("UpdateFilename"), OnValueChanged(nameof(OnNameChanged))]
         public string propertyName;
         public string description;
         public ItemPropertyType propertyType;
@@ -25,5 +25,11 @@ namespace Gamepangin
             AssetDatabase.Refresh();
         }
 #endif
+        
+        private void OnNameChanged()
+        {
+            var formattedString = propertyName.ToLower().Replace(" ", "-");
+            id = $"property-{formattedString}";
+        }
     }
 }

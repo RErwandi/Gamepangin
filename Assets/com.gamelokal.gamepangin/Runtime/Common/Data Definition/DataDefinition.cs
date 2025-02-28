@@ -1,25 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Gamepangin
 {
     public abstract class DataDefinition<T> : DataDefinitionBase where T : DataDefinition<T>
     {
-        internal override bool IsUnique()
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                id = Guid.NewGuid().ToString();
-            }
-            
-            return Definitions
-                .Where(asset => asset != null)
-                .Where(asset => asset.GetInstanceID() != GetInstanceID())
-                .All(asset => !asset.Id.Equals(Id));
-        }
-        
         private static T[] definitions = Array.Empty<T>();
         private static Dictionary<string, T> definitionsById;
         
@@ -107,7 +93,7 @@ namespace Gamepangin
                 
                 try
                 {
-                    definitionsById.Add(def.Id.ToString(), def);
+                    definitionsById.Add(def.Id, def);
                 }
                 catch
                 {

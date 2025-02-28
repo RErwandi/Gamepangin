@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 
@@ -136,7 +137,7 @@ namespace Gamepangin
 
         [TitleGroup("Text")] 
         
-        public Text percentageText;
+        public TextMeshProUGUI percentageText;
         public string textPrefix;
         public string textSuffix;
         public float textValueMultiplier = 1f;

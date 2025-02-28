@@ -23,6 +23,8 @@ namespace Gamepangin
             }
         }
 
+        public bool OverWeight => TotalWeight >= MaxWeight;
+
         public event UnityAction<float> WeightChanged;
 
         [SerializeField]

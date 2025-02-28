@@ -26,9 +26,6 @@ namespace Gamepangin
             { 
                 int oldStack = stackCount;
                 stackCount = Mathf.Clamp(value, 0, definition.StackSize);
-
-                if (stackCount == oldStack)
-                    return;
 				
                 StackCountChanged?.Invoke();
             } 
@@ -44,12 +41,6 @@ namespace Gamepangin
                 }
 
                 float weight = Definition.Weight;
-                foreach (var prop in Properties)
-                {
-                    if (prop.PropertyType == ItemPropertyType.Item && prop.Id != null)
-                        weight += ItemDefinition.GetWithId(prop.Id).Weight;
-                }
-
                 return weight * stackCount;
             }
         }

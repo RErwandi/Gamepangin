@@ -5,6 +5,6 @@ namespace Gamepangin
         Boolean,
         Integer,
         Float,
-        Item
+        String
     }
 }

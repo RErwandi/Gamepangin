@@ -1,4 +1,5 @@
 using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -10,6 +11,7 @@ namespace Gamepangin
         //[ValueDropdown(Constants.EDITOR_ALL_ITEM_PROPERTY, FlattenTreeView = true)]
         [SerializeField] private ItemPropertyDefinition definition;
         [SerializeField] private float propertyValue;
+        [SerializeField] private string propertyString;
         
         public string Id => definition.Id;
         public ItemPropertyType PropertyType => definition.propertyType;
@@ -18,6 +20,13 @@ namespace Gamepangin
         {
             definition = null;
             propertyValue = 100f;
+            propertyString = string.Empty;
+        }
+
+        public ItemProperty(string definitionId, float value)
+        {
+            definition = ItemPropertyDefinition.GetWithId(definitionId);
+            propertyValue = value;
         }
         
         public ItemProperty GetClone() => (ItemProperty)MemberwiseClone();
@@ -48,12 +57,24 @@ namespace Gamepangin
 
         public float Float
         {
-            get => propertyValue;
+            get => (float)Math.Round(propertyValue, 2);
             set
             {
                 if (PropertyType == ItemPropertyType.Float)
                 {
                     SetIntervalValue(value);
+                }
+            }
+        }
+        
+        public string String
+        {
+            get => propertyString;
+            set
+            {
+                if (PropertyType == ItemPropertyType.String)
+                {
+                    SetStringValue(value);
                 }
             }
         }
@@ -66,6 +87,17 @@ namespace Gamepangin
             propertyValue = value;
 
             if (Math.Abs(oldValue - propertyValue) > 0.01f)
+            {
+                PropertyChanged?.Invoke(this);
+            }
+        }
+        
+        private void SetStringValue(string value)
+        {
+            var oldValue = propertyString;
+            propertyString = value;
+
+            if (!string.Equals(oldValue, propertyString, StringComparison.Ordinal))
             {
                 PropertyChanged?.Invoke(this);
             }

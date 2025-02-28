@@ -1,12 +1,11 @@
-  using UnityEditor.Graphs;
-  using UnityEngine;
+using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace Gamepangin.UI
 {
-    public class ItemSlotUI : SlotUI<Item>, IBeginDragHandler, IDragHandler, IEndDragHandler, ISelectHandler, IDeselectHandler
+    public class ItemSlotUI : SlotUI<Item>, IBeginDragHandler, IDragHandler, IEndDragHandler, ISelectHandler
     {
-        [SerializeField] private RectTransform dragTarget;
+        [SerializeField] private RectTransform dragTarget, dragParent;
         [SerializeField] private CanvasGroup dragCanvasGroup;
 
         public Item Item => itemSlot?.Item;
@@ -16,18 +15,21 @@ namespace Gamepangin.UI
         public bool HasItemSlot => itemSlot != null;
         public bool HasContainer => HasItemSlot && itemSlot.HasContainer;
         public int SlotIndex { get; set; }
-        public bool IsSelected => isSelected;
+
+        public bool IsSelected
+        {
+            get => isSelected;
+            set => isSelected = value;
+        }
 
         private ItemSlot itemSlot;
         private bool isSelected;
         private Transform canvasTransform;
-        private Transform originalParent;
         private Vector2 originalPosition;
 
         private void Start()
         {
             canvasTransform = GetComponentInParent<Canvas>().transform;
-            originalParent = transform;
         }
 
         public void SetItemSlot(ItemSlot itemSlot, int index)
@@ -50,7 +52,14 @@ namespace Gamepangin.UI
             else
                 SetData(null);
 
-            void OnSlotChanged(ItemSlot.CallbackContext context) => SetData(this.itemSlot.Item);
+            void OnSlotChanged(ItemSlot.CallbackContext context)
+            {
+                SetData(this.itemSlot.Item);
+                if (isSelected)
+                {
+                    ItemSelectedEvent.Trigger(Container, Item, SlotIndex);
+                }
+            }
         }
 
         public void OnBeginDrag(PointerEventData eventData)
@@ -85,23 +94,7 @@ namespace Gamepangin.UI
                 if (slot != null)
                 {
                     var targetItemSlot = slot.itemSlot;
-
-                    if (targetItemSlot.Item != null)
-                    {
-                        if (itemSlot.Container.GetAllowedCount(targetItemSlot.Item, targetItemSlot.Item.StackCount, out string rejectReason) <= 0)
-                        {
-                            Debug.Log($"Cant swap item because {rejectReason}");
-                        }
-                    }
-                    else if (targetItemSlot.Container.GetAllowedCount(itemSlot.Item, itemSlot.Item.StackCount,
-                                 out string rejectReason) > 0)
-                    {
-                        (targetItemSlot.Item, itemSlot.Item) = (itemSlot.Item, targetItemSlot.Item);
-                    }
-                    else
-                    {
-                        Debug.Log($"Cant swap item because {rejectReason}");
-                    }
+                    (targetItemSlot.Item, itemSlot.Item) = (itemSlot.Item, targetItemSlot.Item);
                 }
                 
                 // Drop Item if dragged to GameObject with ItemDropUI.cs
@@ -112,7 +105,7 @@ namespace Gamepangin.UI
                 }
             }
 
-            dragTarget.SetParent(originalParent);
+            dragTarget.SetParent(dragParent);
             dragTarget.anchoredPosition = originalPosition;
         }
 
@@ -120,7 +113,7 @@ namespace Gamepangin.UI
         {
             isSelected = true;
             
-            ItemSelectedEvent.Trigger(Item);
+            ItemSelectedEvent.Trigger(Container, Item, SlotIndex);
         }
 
         public void OnDeselect(BaseEventData eventData)

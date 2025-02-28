@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -8,24 +9,19 @@ namespace Gamepangin
     public class MenuManager : Singleton<MenuManager>
     {
         protected override bool IsPersistBetweenScenes => false;
-        
-        [InlineButton(nameof(SetDatabase), "Auto")]
-        [SerializeField]
-        private MenuDatabase menuDatabase;
 
-        public List<Menu> MenuScreens => menuDatabase.MenuScreens;
+        private List<Menu> menuScreens = new();
 
-        [ShowInInspector]
+        [ShowInInspector, ReadOnly]
         private List<Menu> menuStack = new();
         private Menu LastMenu => menuStack[^1];
 
         private void Start()
         {
-            var openedMenu = GetComponentsInChildren<Menu>();
-            for(int i = 0; i < openedMenu.Length; i++)
+            menuScreens = GetComponentsInChildren<Menu>().ToList();
+            foreach (var menu in menuScreens)
             {
-                var menu = openedMenu[i];
-                if(menu.Canvas.enabled)
+                if(menu.gameObject.activeInHierarchy)
                     menuStack.Add(menu);
             }
         }
@@ -76,11 +72,11 @@ namespace Gamepangin
 
         private GameObject GetPrefab(string prefabName)
         {
-            for (int i = 0; i < MenuScreens.Count; i++)
+            for (int i = 0; i < menuScreens.Count; i++)
             {
-                if (MenuScreens[i].name == prefabName)
+                if (menuScreens[i].name == prefabName)
                 {
-                    return MenuScreens[i].gameObject;
+                    return menuScreens[i].gameObject;
                 }
             }
             Debug.LogError("Prefab not found for " + prefabName);
@@ -104,7 +100,10 @@ namespace Gamepangin
             if (menu.CloseOtherMenuWhenOpen)
             {
                 if (menuStack.Count > 1)
+                {
                     menuStack[^2].gameObject.SetActive(true);
+                    menuStack[^2].ReOpen();
+                }
             }
             
             CloseTopMenu();
@@ -126,14 +125,6 @@ namespace Gamepangin
             if (Input.GetKeyDown(KeyCode.Escape) && menuStack.Count > 0)
             {
                 LastMenu.OnBackPressed();
-            }
-        }
-
-        private void SetDatabase()
-        {
-            menuDatabase = GamepanginGeneralSettings.Instance.menuDatabase;
-            if(menuDatabase == null){
-                Debug.LogWarning("Menu Database has not been created in Gamepangin General Settings.");
             }
         }
     }

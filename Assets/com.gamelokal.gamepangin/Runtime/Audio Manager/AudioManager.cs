@@ -60,7 +60,7 @@ namespace Gamepangin
         {
             if (clipData == null)
             {
-                Debug.LogError("AudioClipData is null");
+                Debug.LogWarning("Audio Clip Data is null");
                 return;
             }
 

@@ -70,7 +70,8 @@ namespace Gamepangin
 
         public override void OnBackPressed()
         {
-            Close();
+            if(Instance.BackOnEscPressed)
+                Close();
         }
         
         protected override void OnOpen(){ }
@@ -87,8 +88,10 @@ namespace Gamepangin
         
         [Tooltip("Destroy the Game Object when menu is closed (reduces memory usage)")]
         [SerializeField] private bool destroyOnClosed;
+        [SerializeField] private bool backOnEscPressed = true;
         [SerializeField] private Button backButton;
         public Button BackButton => backButton;
+        public bool BackOnEscPressed => backOnEscPressed;
         public bool DestroyOnClosed => destroyOnClosed;
         
         
@@ -105,6 +108,11 @@ namespace Gamepangin
                 rect.anchoredPosition = Vector2.zero;
                 gameObject.SetActive(false);
             }
+        }
+
+        public void ReOpen()
+        {
+            OnOpen();
         }
 
         public abstract void OnBackPressed();
