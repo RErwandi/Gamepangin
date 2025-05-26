@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Fusion;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -72,7 +71,7 @@ namespace Gamepangin
         public string Name => itemName;
         public Sprite Icon => icon;
         public string Description => description;
-        public NetworkObject Prefab => itemPrefab;
+        public GameObject Prefab => itemPrefab;
         public int StackSize => stackSize;
         public float Weight => weight;
         public ItemCategoryDefinition Category => category;
